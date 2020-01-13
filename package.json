@@ -1,0 +1,41 @@
+{
+  "name": "vcytoscape",
+  "version": "1.0.5",
+  "main": "lib/vcytoscape.common.js",
+  "author": "shichuanpo <yangdongfeng8@126.com>",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build --dest demo && vue-cli-service build --target lib --name vcytoscape src/plugin.js --dest lib",
+    "lint": "vue-cli-service lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shichuanpo/vcytoscape.git"
+  },
+  "keywords": [
+    "legend"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shichuanpo/vcytoscape/issues"
+  },
+  "homepage": "https://github.com/shichuanpo/vcytoscape",
+  "peerDependencies": {
+    "core-js": "^3.4.4",
+    "vue": "^2.6.10"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^4.1.0",
+    "@vue/cli-plugin-eslint": "^4.1.0",
+    "@vue/cli-service": "^4.1.0",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "vue-template-compiler": "^2.6.10",
+    "less": "^3.0.4",
+    "less-loader": "^4.1.0",
+    "pug": "^2.0.3",
+    "pug-plain-loader": "^1.0.0"
+  }
+}
