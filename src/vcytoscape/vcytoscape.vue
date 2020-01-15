@@ -166,6 +166,8 @@ export default {
       return _data.map(_item => {
         let _categoryName = this.dataByCategory(_item.data, _item.group)
         _item.classes = _item.classes || []
+        _categoryName &&
+        !_item.classes.includes(this.categoryNameToClass[_categoryName]) &&
         _item.classes.push(this.categoryNameToClass[_categoryName])
         return _item
       })
@@ -201,8 +203,43 @@ export default {
         let _eleIn = _allElements.$id(_data.data.id)
         if (!_eleIn || !_eleIn.length) { // 添加到图中
           _addData.push(_data)
-        } else if (_eleIn.isNode()) { // 已有数据的位置更新（todo：信息更新）
-          // _eleIn.lock()
+        } else if (_eleIn.isNode()) { // 已有数据更新
+          let _keys = Object.keys(_data)
+          let _keysLength = _keys.length
+          for (let i = 0; i < _keysLength; i++) {
+            let key = _keys[i]
+            console.log('key = ', key)
+            switch (key) {
+              /**
+               * 与布局，分类等有冲突的属性不允许更新
+               */
+              // case 'position':
+              // case 'renderedPosition':
+              // case 'relativePosition':
+              // case 'classes':
+              //   break;
+              case 'data':
+                if (JSON.stringify(_eleIn.data()) !== JSON.stringify(_data.data)) {
+                  _eleIn.data(_data.data)
+                }
+                break
+              case 'selected':
+                _data.selected ? _eleIn.select() : _eleIn.unselect()
+                break
+              case 'selectable':
+                _data.selectable ? _eleIn.selectify() : _eleIn.unselectify()
+                break
+              case 'locked':
+                _data.locked ? _eleIn.lock() : _eleIn.unlock()
+                break
+              case 'grabbable':
+                _data.grabbable ? _eleIn.grabify() : _eleIn.ungrabify()
+                break
+              case 'pannable':
+                _data.pannable ? _eleIn.panify() : _eleIn.unpanify()
+                break
+            }
+          }
         }
       })
       this.$cytoscapeInstance.add(_addData)
