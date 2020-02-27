@@ -111,7 +111,7 @@ export default {
                 }))
               } else if (isObject(_styles)) {
                 /****
-                 * 分类配置为 { name: '', data: [] }
+                 * 分类配置为 { key: '', styles: {} }
                  */
                 _categoryStyles = _categoryStyles.concat(_categorys.map((name, _idx) => {
                   let _baseIdx = _idx % _defaultStyle.length
