@@ -299,72 +299,7 @@ category | 图例分类配置 | Object | - | {}|
 
 ### category
 
-<table>
-    <tr>
-      <th>两种用法</th>
-      <th>参数</th>
-      <th>说明</th>
-	  <th>类型</th>
-	  <th>可选值</th>
-	  <th>默认值</th>
-  </tr>
-  <tr>
-      <td rowspan='4'>Array</td>
-      <td>name</td>
-	  <td>指定分类项名称</td>
-	  <td>String</td>
-	  <td>-</td>
-	  <td>-</td>
-      
-  </tr>
-  <tr>
-      <td>matching</td>
-	  <td>分类项匹配规则</td>
-	  <td>Function</td>
-	  <td>-</td>
-	  <td>-</td>
-  </tr>
-  <tr>
-      <td>style</td>
-	  <td>分类配色，具体参考cytoscape node颜色属性</td>
-	  <td>Object</td>
-	  <td>-</td>
-	  <td>-</td>
-  </tr>
-  <tr>
-      <td>formatter</td>
-	  <td>翻译</td>
-	  <td>Function</td>
-	  <td>-</td>
-	  <td>-</td>
-  </tr>
-  <tr>
-  <td rowspan='2'>Object</td>
-      <td>key</td>
-	  <td>指定获取数据中的某个字段</td>
-	  <td>String</td>
-	  <td>-</td>
-	  <td>-</td>
-  </tr>
-  <tr>
-	  <td>styles</td>
-	  <td>为上述style参数的数组或者key的键值对</td>
-	  <td>Object/Array</td>
-	  <td>-</td>
-	  <td>-</td>
-  </tr>
-</table>
-
-```javascript
-category = [{
-  name: 'category1',
-  matching: data => data.label === 'category1', // 目前只支持函数
-  style: {
-    'background-color': '#c23531'
-  },
-  formatter: name => '分类1'
-}]
-```
+同上
 
 #### events
 

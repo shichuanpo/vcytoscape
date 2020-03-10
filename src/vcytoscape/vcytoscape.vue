@@ -1,6 +1,7 @@
 <template lang="pug">
   .cytoscape--container
     .cytoscape--container__graph(ref="cytoscapeBox")
+    slot(:data="data", :category="category", name="legend")
 </template>
 <script>
 import cytoscape from 'cytoscape'
@@ -12,15 +13,15 @@ export default {
   props: {
     option: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     },
     category: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     },
     data: {
       type: Array,
-      default: () => []
+      default: () => ([])
     }
   },
   data () {
@@ -76,8 +77,9 @@ export default {
       })
       return _categoryNameToClass
     },
-    styles () {
+    categoryConfig () {
       let _categoryStyles = []
+      let _categoryStatus = {}
       if (this.category) {
         Object.keys(this.category).forEach(key => {
           const _option = this.category[key]
@@ -87,8 +89,9 @@ export default {
             /****
              * 分类配置为 { data: [{ name: '', style: {}, matching: function () {} }] }
              */
-            _categoryStyles = _categoryStyles.concat(_option.map(({ name, style }, _idx) => {
+            _categoryStyles = _categoryStyles.concat(_option.map(({ name, style, status }, _idx) => {
               let _baseIdx = _idx % _defaultStyle.length
+              _categoryStatus[name] = status
               return {
                 selector: `.${this.categoryNameToClass[name]}`,
                 style: merge({}, _defaultStyle[_baseIdx], style)
@@ -96,6 +99,7 @@ export default {
             }))
           } else {
             const _styles = _option.styles || []
+            const _status = _option.status || []
             if (_styles) {
               if (isArray(_styles)) {
                 /****
@@ -103,7 +107,9 @@ export default {
                  */
                 _categoryStyles = _categoryStyles.concat(_categorys.map((name, _idx) => {
                   let _optIdx = _idx % _styles.length
+                  let _statusIdx = _idx % _styles.length
                   let _baseIdx = _idx % _defaultStyle.length
+                  _categoryStatus[name] = _status[_statusIdx]
                   return {
                     selector: `.${this.categoryNameToClass[name]}`,
                     style: merge({}, _defaultStyle[_baseIdx], _styles[_optIdx])
@@ -111,10 +117,11 @@ export default {
                 }))
               } else if (isObject(_styles)) {
                 /****
-                 * 分类配置为 { key: '', styles: {} }
+                 * 分类配置为 { name: '', styles: {} }
                  */
                 _categoryStyles = _categoryStyles.concat(_categorys.map((name, _idx) => {
                   let _baseIdx = _idx % _defaultStyle.length
+                  _categoryStatus[name] = _status[name]
                   return {
                     selector: `.${this.categoryNameToClass[name]}`,
                     style: merge({}, _defaultStyle[_baseIdx], _styles[name] || {})
@@ -125,11 +132,14 @@ export default {
           }
         })
       }
-      return _categoryStyles
+      return {
+        styles: _categoryStyles,
+        status: _categoryStatus
+      }
     },
     cytoscapeOptions () {
       let _mergeOption = mergeArrayConcat({}, cytoscapeOption, {
-        style: this.styles
+        style: this.categoryConfig.styles
       }, this.option || {})
       return _mergeOption
     }
@@ -166,9 +176,8 @@ export default {
       return _data.map(_item => {
         let _categoryName = this.dataByCategory(_item.data, _item.group)
         _item.classes = _item.classes || []
-        _categoryName &&
-        !_item.classes.includes(this.categoryNameToClass[_categoryName]) &&
-        _item.classes.push(this.categoryNameToClass[_categoryName])
+        merge(_item, this.categoryConfig.status[_categoryName])
+        _categoryName && _item.classes.push(this.categoryNameToClass[_categoryName])
         return _item
       })
     },
@@ -182,7 +191,9 @@ export default {
     setOptions: function (option) {
       if (!this.$cytoscapeInstance) return
       this.$cytoscapeInstance.startBatch()
-      Object.keys(option).forEach(key => this.$cytoscapeInstance[key] && this.$cytoscapeInstance[key](option[key]))
+      Object.keys(option).forEach(key => {
+        this.$cytoscapeInstance[key] && this.$cytoscapeInstance[key](option[key])
+      })
       this.$cytoscapeInstance.endBatch()
       this.reLayout()
     },
@@ -199,16 +210,15 @@ export default {
       let _removeEles = _allElements.filter(ele => !_dataWithClasses.some(item => ele.id() === item.data.id))
       this.$cytoscapeInstance.remove(_removeEles)
       let _addData = []
-      _dataWithClasses.forEach(_data => {
+      _dataWithClasses.forEach((_data, idx) => {
         let _eleIn = _allElements.$id(_data.data.id)
         if (!_eleIn || !_eleIn.length) { // 添加到图中
           _addData.push(_data)
-        } else if (_eleIn.isNode()) { // 已有数据更新
+        } else { // 已有数据更新
           let _keys = Object.keys(_data)
           let _keysLength = _keys.length
           for (let i = 0; i < _keysLength; i++) {
             let key = _keys[i]
-            console.log('key = ', key)
             switch (key) {
               /**
                * 与布局，分类等有冲突的属性不允许更新
@@ -254,7 +264,6 @@ export default {
       })
       delete _option.layout
       this.$cytoscapeInstance = cytoscape(_option)
-      // register all the component events as cytoscape
       this.events = this.events.concat(createEvents(this.$cytoscapeInstance))
       for (const [eventType, callback] of Object.entries(this.$listeners)) {
         const func = function (event) {

@@ -1,5 +1,4 @@
 <template lang="pug">
-div
   vue-legend(v-if="legendData && legendData.length", :data="legendData", :option="option", v-model="legendModel")
 </template>
 <script>
@@ -46,6 +45,9 @@ export default {
     }
   },
   computed: {
+    categoryInType () {
+      return this.category && this.category[this.type]
+    },
     legendModel: {
       get () {
         return merge({}, this.model || this.innerModel)
@@ -71,20 +73,20 @@ export default {
     },
     categoryParams () {
       let _categoryParams = {}
-      if (this.category) {
-        if (isArray(this.category)) {
+      if (this.categoryInType) {
+        if (isArray(this.categoryInType)) {
           /****
            * 分类配置为 { data: [{ name: '', style: {}, formatter: function () {}, matching: function () {} }] }
            * 其中formatter只用以legend
            */
-          this.category.forEach(({ name, style, formatter }, _idx) => {
+          this.categoryInType.forEach(({ name, style, formatter }, _idx) => {
             let _baseIdx = _idx % categoryOption[this.type].styles.length
             _categoryParams[name] = _categoryParams[name] || {}
             _categoryParams[name].style = merge({}, categoryOption[this.type].styles[_baseIdx], style)
             _categoryParams[name].formatter = formatter
           })
         } else {
-          let _styles = this.category.styles
+          let _styles = this.categoryInType.styles
           if (_styles) {
             if (isArray(_styles)) {
               /****
@@ -118,11 +120,11 @@ export default {
       return _categorys
     },
     categoryBy () {
-      if (this.category) {
-        if (isArray(this.category)) {
-          return this.category
-        } else if (isObject(this.category)) {
-          return this.category.key
+      if (this.categoryInType) {
+        if (isArray(this.categoryInType)) {
+          return this.categoryInType
+        } else if (isObject(this.categoryInType)) {
+          return this.categoryInType.key
         }
       }
       return null
