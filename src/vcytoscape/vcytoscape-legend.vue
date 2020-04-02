@@ -1,5 +1,5 @@
 <template lang="pug">
-  vue-legend(v-if="legendData && legendData.length", :data="legendData", :option="option", v-model="legendModel")
+  vue-legend(:data="legendData", :option="option", v-model="legendModel")
 </template>
 <script>
 import { merge, isObject, isArray, isFunction, colorRgba } from './util'
@@ -72,7 +72,7 @@ export default {
       })
     },
     categoryParams () {
-      let _categoryParams = {}
+      const _categoryParams = {}
       if (this.categoryInType) {
         if (isArray(this.categoryInType)) {
           /****
@@ -80,21 +80,21 @@ export default {
            * 其中formatter只用以legend
            */
           this.categoryInType.forEach(({ name, style, formatter }, _idx) => {
-            let _baseIdx = _idx % categoryOption[this.type].styles.length
+            const _baseIdx = _idx % categoryOption[this.type].styles.length
             _categoryParams[name] = _categoryParams[name] || {}
             _categoryParams[name].style = merge({}, categoryOption[this.type].styles[_baseIdx], style)
             _categoryParams[name].formatter = formatter
           })
         } else {
-          let _styles = this.categoryInType.styles
+          const _styles = this.categoryInType.styles
           if (_styles) {
             if (isArray(_styles)) {
               /****
                * 分类配置为 { key: '', styles: [] }
                */
               this.categorys.forEach((name, _idx) => {
-                let _optIdx = _idx % _styles.length
-                let _baseIdx = _idx % categoryOption[this.type].styles.length
+                const _optIdx = _idx % _styles.length
+                const _baseIdx = _idx % categoryOption[this.type].styles.length
                 _categoryParams[name] = _categoryParams[name] || {}
                 _categoryParams[name].style = merge({}, categoryOption[this.type].styles[_baseIdx], _styles[_optIdx])
               })
@@ -103,7 +103,7 @@ export default {
                * 分类配置为 { key: '', styles: {} }
                */
               this.categorys.forEach((name, _idx) => {
-                let _baseIdx = _idx % categoryOption[this.type].styles.length
+                const _baseIdx = _idx % categoryOption[this.type].styles.length
                 _categoryParams[name] = _categoryParams[name] || {}
                 _categoryParams[name].style = merge({}, categoryOption[this.type].styles[_baseIdx], _styles[name] || {})
               })
@@ -114,7 +114,7 @@ export default {
       return this.getTransStyle(_categoryParams)
     },
     categorys () {
-      let _categorys = Array.from(
+      const _categorys = Array.from(
         new Set((this.data || []).filter(dat => dat.group === this.type).map(dat => this.dataByCategory(dat.data)).filter(g => !!g))
       )
       return _categorys
@@ -131,12 +131,14 @@ export default {
     }
   },
   methods: {
+
     /****
      * 目前支持的样式有：背景颜色（透明度），背景图片，边框颜色，边框类型等
      * todo：shape、渐变等
      */
+
     getTransStyle (params) {
-      let _isNodes = this.type === 'nodes'
+      const _isNodes = this.type === 'nodes'
       Object.keys(params).forEach(key => {
         params[key].style = {
           'backgroundColor': params[key].style['background-color'] ? colorRgba(params[key].style['background-color'], params[key].style['background-opacity'] || 1) : 'none',
@@ -153,7 +155,7 @@ export default {
     },
     dataByCategory (data) {
       if (isArray(this.categoryBy)) {
-        let _category = this.categoryBy.find(category => category.matching && category.matching(data))
+        const _category = this.categoryBy.find(category => category.matching && category.matching(data))
         return _category ? (isFunction(_category.name) ? _category.name(data) : _category.name) : undefined
       } else {
         return data[this.categoryBy]
