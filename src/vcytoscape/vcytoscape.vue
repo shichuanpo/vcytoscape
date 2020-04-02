@@ -272,7 +272,7 @@ export default {
       /**
        * cytoscape init layout跟手动layout有差异，zoom会变化，暂不清楚原因
        */
-      // delete _option.layout
+      _option.layout = { name: 'null' }
       this.$cytoscapeInstance = cytoscape(_option)
       this.events = this.events.concat(createEvents(this.$cytoscapeInstance))
       for (const [eventType, callback] of Object.entries(this.$listeners)) {
@@ -285,6 +285,10 @@ export default {
         })
       }
       this.$cytoscapeInstance.ready()
+      /**
+       * 方便控制停止布局
+       */
+      data && data.length && this.reLayout()
     },
     reLayout () {
       this.$layout && this.$layout.stop()
