@@ -1,8 +1,9 @@
 <template lang="pug">
 #app.cytoscape
   vcytoscape.cytoscape(ref="cytoscape", :option="option.cytoscape", :category="option.category", :data="graphData", @mouseover="createTippy", @ready="cytoscapeInit")
-  vcytoscape-legend.legend(:data="graphData", v-model="legendNodeModel", :option="option.nodeLegend", :category="option.category.nodes")
-  vcytoscape-legend.legend(:data="graphData", v-model="legendEdgeModel", type="edges", :option="option.edgeLegend", :category="option.category.edges")
+    template(v-slot:legend="scope")
+      vcytoscape-legend(:data="scope.data", v-model="legendNodeModel", :option="option.nodeLegend", :category="scope.category")
+      vcytoscape-legend(:data="scope.data", v-model="legendEdgeModel", type="edges", :option="option.edgeLegend", :category="scope.category")
     //- .navigator
   .cytoscape--container__loading(v-if="!option.cytoscape.layout.animate && layoutProgress < 1")
     .center(v-if="layoutProgress === 0")
