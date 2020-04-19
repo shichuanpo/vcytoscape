@@ -12,7 +12,7 @@ const isUndefined = function (item) {
 }
 const __merge = function (type = 'merge', target, source) {
   if (isObject(target) && isObject(source)) {
-    for (let key in source) {
+    for (const key in source) {
       if (isObject(source[key])) {
         target[key] = isObject(target[key]) ? target[key] : {}
         target[key] = __merge(type, target[key], source[key])
@@ -54,7 +54,7 @@ const __merge = function (type = 'merge', target, source) {
   return target
 }
 const _merge = function () {
-  let objs = Array.from(arguments)
+  const objs = Array.from(arguments)
   if (objs.length < 2) {
     return
     // console.error('target or source cannot be null')
@@ -71,19 +71,19 @@ const _merge = function () {
   }
 }
 const merge = function () {
-  let objs = Array.from(arguments)
+  const objs = Array.from(arguments)
   return _merge('merge', ...objs)
 }
 const mergeArrayFindSelector = function () {
-  let objs = Array.from(arguments)
+  const objs = Array.from(arguments)
   return _merge('findSelector', ...objs)
 }
 const mergeArrayConcat = function () {
-  let objs = Array.from(arguments)
+  const objs = Array.from(arguments)
   return _merge('concat', ...objs)
 }
 const mergeArrayReplace = function () {
-  let objs = Array.from(arguments)
+  const objs = Array.from(arguments)
   return _merge('replace', ...objs)
 }
 const createId = function (salt, randomLength = 8) {
@@ -96,13 +96,17 @@ const createId = function (salt, randomLength = 8) {
     ).toString(36)
   )
 }
+
 /**
  * 十六进制颜色值的正则表达式
  * **/
+
 const reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/
+
 /**
  * 颜色转为RGB格式, 只支持HEX/RGB/RGBA
  * **/
+
 function colorRgba (color = '', alpha = 1) {
   let sColor = (color || '').toLowerCase()
   if (sColor && reg.test(sColor)) {
@@ -114,15 +118,15 @@ function colorRgba (color = '', alpha = 1) {
       sColor = sColorNew
     }
     // 处理六位的颜色值
-    let sColorChange = []
+    const sColorChange = []
     for (let i = 1; i < 7; i += 2) {
       sColorChange.push(parseInt('0x' + sColor.slice(i, i + 2)))
     }
     sColorChange.push(alpha)
     return 'rgba(' + sColorChange.join(',') + ')'
   } else if (/^(rgb|RGB)/.test(color)) {
-    let aColor = color.replace(/(?:\(|\)|rgba|RGBA|rgb|RGB)*/g, '').split(',')
-    let [r, g, b] = aColor
+    const aColor = color.replace(/(?:\(|\)|rgba|RGBA|rgb|RGB)*/g, '').split(',')
+    const [r, g, b] = aColor
     return `rgba(${r}, ${g}, ${b}, ${alpha})`
   } else {
     return color
@@ -131,8 +135,8 @@ function colorRgba (color = '', alpha = 1) {
 function debounce (fn, delay, ctx) {
   let timer = null
   return function () {
-    let context = ctx || this
-    let args = arguments
+    const context = ctx || this
+    const args = arguments
     clearTimeout(timer)
     timer = setTimeout(function () {
       fn.apply(context, args)

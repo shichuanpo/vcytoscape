@@ -20,7 +20,7 @@ export default {
       default: () => ({})
     },
     data: {
-      type: Array,
+      type: [Array, Object],
       default: () => ([])
     }
   },
@@ -35,9 +35,21 @@ export default {
     }
   },
   computed: {
+    /**
+     * 统一data样式为Object
+     */
+    unifyData () {
+      if (isArray(this.data)) {
+        return this.filterEdgeWithoutNode({
+          nodes: this.data.filter(dat => dat.group === 'nodes'),
+          edges: this.data.filter(dat => dat.group === 'edges')
+        })
+      }
+      return this.filterEdgeWithoutNode(this.data)
+    },
     nodesCategorys () {
       const _categorys = Array.from(
-        new Set(this.data.filter(dat => dat.group === 'nodes').map(dat => this.dataByCategory(dat.data, 'nodes')).filter(g => !!g))
+        new Set(this.unifyData.nodes.map(dat => this.dataByCategory(dat.data, 'nodes')).filter(g => !!g))
       )
       return _categorys
     },
@@ -53,7 +65,7 @@ export default {
     },
     edgesCategorys () {
       const _categorys = Array.from(
-        new Set(this.data.filter(dat => dat.group === 'edges').map(dat => this.dataByCategory(dat.data, 'edges')).filter(g => !!g))
+        new Set(this.unifyData.edges.map(dat => this.dataByCategory(dat.data, 'edges')).filter(g => !!g))
       )
       return _categorys
     },
@@ -150,7 +162,7 @@ export default {
     }
   },
   watch: {
-    data: {
+    unifyData: {
       handler (newValue) {
         this.setData(newValue)
       },
@@ -168,17 +180,28 @@ export default {
       this.cacheRandomIdMap[key] = this.cacheRandomIdMap[key] || createId(salt, num)
       return this.cacheRandomIdMap[key]
     },
+    getDataFromKey (data, keys) {
+      if (!keys || keys.length < 1) {
+        return data
+      } else if (keys.length === 1) {
+        return data[keys[0]]
+      } else {
+        const key = keys.shift()
+        return this.getDataFromKey(data[key] || {}, keys)
+      }
+    },
     dataByCategory (data, type) {
       if (isArray(this[`${type}CategoryBy`])) {
         const _category = this[`${type}CategoryBy`].find(category => category.matching && category.matching(data))
         return _category ? (isFunction(_category.name) ? _category.name(data) : _category.name) : undefined
       } else {
-        return data[this[`${type}CategoryBy`]]
+        const keys = (this[`${type}CategoryBy`] || '').split('.')
+        return this.getDataFromKey(data, keys)
       }
     },
     getDataWithClasses (data) {
-      const _data = JSON.parse(JSON.stringify(data || []))
-      return _data.map(_item => {
+      const { nodes, edges } = JSON.parse(JSON.stringify(data || {}))
+      return nodes.concat(edges).map(_item => {
         const _categoryName = this.dataByCategory(_item.data, _item.group)
         _item.classes = _item.classes || []
         merge(_item, this.categoryConfig.status[_item.group + '_' + _categoryName])
@@ -203,11 +226,19 @@ export default {
       this.$cytoscapeInstance.endBatch()
       this.reLayout()
     },
+    filterEdgeWithoutNode (data) {
+      const nodes = data.nodes
+      const nodeIds = nodes.map(({ data }) => data.id)
+      const edges = data.edges.filter(({ data }) => nodeIds.includes(data.source) && nodeIds.includes(data.target))
+      return {
+        nodes,
+        edges
+      }
+    },
     /****
      * cytoscape并不支持数据重置，
      * 所以手动了一个方法
      */
-
     setData (data) {
       const _dataWithClasses = this.getDataWithClasses(data)
       if (!this.$cytoscapeInstance) return this.createCytoscape(_dataWithClasses)
@@ -344,7 +375,7 @@ export default {
     }
   },
   mounted () {
-    this.setData(this.data)
+    this.setData(this.unifyData)
   },
   beforeDestroy () {
     this.destroy()

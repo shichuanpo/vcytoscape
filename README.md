@@ -70,12 +70,12 @@
   #### data
 
   ```javascript
-  data = [{
+  [{
     group: 'nodes',
     data: {
       id: 'XXX'
     }
-  }, 
+  }, {
     group: 'nodes',
     data: {
       id: 'YYY'
@@ -86,8 +86,28 @@
       id: 'XXX-YYY',
       source: 'XXX',
       target: 'YYY'
-    }
   }]
+
+  or
+
+  {
+    nodes: [{
+      data: {
+        id: 'XXX'
+      }
+    }, {
+      data: {
+        id: 'YYY'
+      }
+    }],
+    edges: [{
+      data: {
+        id: 'XXX-YYY',
+        source: 'XXX',
+        target: 'YYY'
+      }
+    }]
+  }
   ```
 
   ### category
@@ -199,7 +219,7 @@
  * 分类配置：两种写法
  * 写法一：
  * {
- *   key: 指定获取数据中的某个字段
+ *   key: 指定获取数据中的某个字段, (1.1.7新增 a.b.c 形式的对象字面量)
  *   styles: 分类样式，可以为Array/Object键值对
  * }
  * 写法二：

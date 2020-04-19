@@ -1,22 +1,22 @@
 const handlers = {
   _cxttap: function (e) {
-    let element = e.target
+    const element = e.target
     this.elements().unselect()
     if (element !== this) {
       this.elements(element).select()
     }
   },
   _select: function (e) {
-    let element = e.target
+    const element = e.target
     if (element !== this) {
-      let targetElement = this.elements(':selected')
+      const targetElement = this.elements(':selected')
       let hoverElements = this.collection()
       if (element.isNode()) {
         hoverElements = targetElement.closedNeighborhood()
       } else {
         hoverElements = hoverElements.merge(targetElement).merge(targetElement.connectedNodes())
       }
-      let elseElements = this.elements().difference(hoverElements)
+      const elseElements = this.elements().difference(hoverElements)
       elseElements.removeClass('hover').addClass('unhover')
       hoverElements.removeClass('unhover').addClass('hover')
     }
@@ -26,8 +26,8 @@ const handlers = {
   }
 }
 function createEvents (cy) {
-  let selector = ''
-  let events = []
+  const selector = ''
+  const events = []
   ;['select', 'unselect', 'cxttap'].forEach(item => {
     selector
       ? cy.on(item, selector, handlers[`_${item}`])

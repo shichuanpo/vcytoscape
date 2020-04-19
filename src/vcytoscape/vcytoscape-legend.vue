@@ -22,7 +22,7 @@ export default {
       }
     },
     data: {
-      type: Array,
+      type: [Array, Object],
       default: () => {
         return []
       }
@@ -59,7 +59,7 @@ export default {
     },
     legendData () {
       return this.categorys.map(name => {
-        const { style, formatter } = this.categoryParams[name]
+        const { style, formatter } = this.categoryParams[name] || {}
         const { backgroundColor, backgroundImage, backgroundPosition, backgroundRepeat, backgroundSize, borderColor } = style
         return Object.assign({}, {
           activeTagStyle: { backgroundColor, backgroundImage, backgroundPosition, backgroundRepeat, backgroundSize, borderColor },
@@ -86,36 +86,46 @@ export default {
             _categoryParams[name].formatter = formatter
           })
         } else {
-          const _styles = this.categoryInType.styles
-          if (_styles) {
-            if (isArray(_styles)) {
-              /****
-               * 分类配置为 { key: '', styles: [] }
-               */
-              this.categorys.forEach((name, _idx) => {
-                const _optIdx = _idx % _styles.length
-                const _baseIdx = _idx % categoryOption[this.type].styles.length
-                _categoryParams[name] = _categoryParams[name] || {}
-                _categoryParams[name].style = merge({}, categoryOption[this.type].styles[_baseIdx], _styles[_optIdx])
-              })
-            } else if (isObject(_styles)) {
-              /****
-               * 分类配置为 { key: '', styles: {} }
-               */
-              this.categorys.forEach((name, _idx) => {
-                const _baseIdx = _idx % categoryOption[this.type].styles.length
-                _categoryParams[name] = _categoryParams[name] || {}
-                _categoryParams[name].style = merge({}, categoryOption[this.type].styles[_baseIdx], _styles[name] || {})
-              })
-            }
+          const _styles = this.categoryInType.styles || {}
+          if (isArray(_styles)) {
+            /****
+             * 分类配置为 { key: '', styles: [] }
+             */
+            this.categorys.forEach((name, _idx) => {
+              const _optIdx = _idx % _styles.length
+              const _baseIdx = _idx % categoryOption[this.type].styles.length
+              _categoryParams[name] = _categoryParams[name] || {}
+              _categoryParams[name].style = merge({}, categoryOption[this.type].styles[_baseIdx], _styles[_optIdx])
+            })
+          } else if (isObject(_styles)) {
+            /****
+             * 分类配置为 { key: '', styles: {} }
+             */
+            this.categorys.forEach((name, _idx) => {
+              const _baseIdx = _idx % categoryOption[this.type].styles.length
+              _categoryParams[name] = _categoryParams[name] || {}
+              _categoryParams[name].style = merge({}, categoryOption[this.type].styles[_baseIdx], _styles[name] || {})
+            })
           }
         }
       }
       return this.getTransStyle(_categoryParams)
     },
+    /**
+     * 统一data样式为Object
+     */
+    unifyData () {
+      if (isArray(this.data)) {
+        return {
+          nodes: this.data.filter(dat => dat.group === 'nodes'),
+          edges: this.data.filter(dat => dat.group === 'edges')
+        }
+      }
+      return this.data
+    },
     categorys () {
       const _categorys = Array.from(
-        new Set((this.data || []).filter(dat => dat.group === this.type).map(dat => this.dataByCategory(dat.data)).filter(g => !!g))
+        new Set(this.unifyData[this.type].map(dat => this.dataByCategory(dat.data)).filter(g => !!g))
       )
       return _categorys
     },
@@ -131,7 +141,6 @@ export default {
     }
   },
   methods: {
-
     /****
      * 目前支持的样式有：背景颜色（透明度），背景图片，边框颜色，边框类型等
      * todo：shape、渐变等
@@ -153,12 +162,23 @@ export default {
       })
       return params
     },
+    getDataFromKey (data, keys) {
+      if (!keys || keys.length < 1) {
+        return data
+      } else if (keys.length === 1) {
+        return data[keys[0]]
+      } else {
+        const key = keys.shift()
+        return this.getDataFromKey(data[key] || {}, keys)
+      }
+    },
     dataByCategory (data) {
       if (isArray(this.categoryBy)) {
         const _category = this.categoryBy.find(category => category.matching && category.matching(data))
         return _category ? (isFunction(_category.name) ? _category.name(data) : _category.name) : undefined
       } else {
-        return data[this.categoryBy]
+        const keys = (this.categoryBy || '').split('.')
+        return this.getDataFromKey(data, keys)
       }
     }
   }
