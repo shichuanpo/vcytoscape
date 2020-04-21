@@ -12,15 +12,15 @@
 
   Download the library:
 
-  `npm install vcytpscape`
+  `npm install vcytoscape`
 
   Import the library for your project:
 
   ```js
   import Vue from 'vue';
-  import vcytpscape from 'vcytpscape';
+  import vcytoscape from 'vcytoscape';
 
-  Vue.use( vcytpscape, {
+  Vue.use( vcytoscape, {
       beforeCreate: (Cytoscape) => { // inject plugin for cytoscape
         Cytoscape.use(d3Force)
       }
