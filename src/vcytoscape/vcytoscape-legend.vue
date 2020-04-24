@@ -125,7 +125,7 @@ export default {
     },
     categorys () {
       const _categorys = Array.from(
-        new Set(this.unifyData[this.type].map(dat => this.dataByCategory(dat.data)).filter(g => !!g))
+        new Set((this.unifyData[this.type] || []).map(dat => this.dataByCategory(dat.data)).filter(g => !!g))
       )
       return _categorys
     },

@@ -199,15 +199,19 @@ export default {
         return this.getDataFromKey(data, keys)
       }
     },
+    getDataWithClassesFromType (item, type = 'nodes') {
+      const _categoryName = this.dataByCategory(item.data, type)
+      item.classes = item.classes || []
+      merge(item, this.categoryConfig.status[type + '_' + _categoryName])
+      _categoryName && item.classes.push(this.categoryNameToClass[type + '_' + _categoryName])
+      return item
+    },
     getDataWithClasses (data) {
       const { nodes, edges } = JSON.parse(JSON.stringify(data || {}))
-      return nodes.concat(edges).map(_item => {
-        const _categoryName = this.dataByCategory(_item.data, _item.group)
-        _item.classes = _item.classes || []
-        merge(_item, this.categoryConfig.status[_item.group + '_' + _categoryName])
-        _categoryName && _item.classes.push(this.categoryNameToClass[_item.group + '_' + _categoryName])
-        return _item
-      })
+      return nodes.map(_item => this.getDataWithClassesFromType(_item, 'nodes'))
+        .concat(
+          edges.map(_item => this.getDataWithClassesFromType(_item, 'edges'))
+        )
     },
     getAllElements () {
       return this.$cytoscapeInstance &&
@@ -227,13 +231,10 @@ export default {
       this.reLayout()
     },
     filterEdgeWithoutNode (data) {
-      const nodes = data.nodes
+      const nodes = data.nodes || []
       const nodeIds = nodes.map(({ data }) => data.id)
-      const edges = data.edges.filter(({ data }) => nodeIds.includes(data.source) && nodeIds.includes(data.target))
-      return {
-        nodes,
-        edges
-      }
+      const edges = (data.edges || []).filter(({ data }) => nodeIds.includes(data.source) && nodeIds.includes(data.target))
+      return { nodes, edges }
     },
     /****
      * cytoscape并不支持数据重置，
