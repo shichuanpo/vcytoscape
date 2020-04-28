@@ -6,8 +6,10 @@
 
   ## Demo
   
-  [demo](https://shichuanpo.github.io/vcytoscape/demo)
-
+  [基础用法](https://shichuanpo.github.io/vcytoscape/demo/index.html)
+  [分类颜色](https://shichuanpo.github.io/vcytoscape/demo/category.html)
+  [图例用法](https://shichuanpo.github.io/vcytoscape/demo/legend.html)
+  [工具栏](https://shichuanpo.github.io/vcytoscape/demo/toolbar.html)
   ## Usage
 
   Download the library:
