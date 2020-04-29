@@ -1,27 +1,46 @@
-  # vcytoscape
-  > 本组件为基于cytoscape的关系图区块。
-  > * 基于数据渲染当前显示的图，添加删除，只要修改数据即可；[<font color=#f16464>数据更新需要手动操作</font>](https://js.cytoscape.org/#eles.data)。
-  > * filterByFunction会删除数据，但是会缓存，getAllElements能拿到包含过滤数据的全部数据
-  > * 推荐使用[cytoscape-d3-force](https://github.com/shichuanpo/cytoscape.js-d3-force)布局，依赖d3-force, 有布局的进度返回
+- [vcytoscape](#vcytoscape)
+  * [案例](#案例)
+  * [快速上手](#快速上手)
+  * [包含组件](#包含组件)
+  * [vcytoscape组件](#vcytoscape组件)
+    + [属性](#属性)
+    + [方法](#方法)
+    + [事件](#事件)
+    + [插槽](#插槽)
+  * [vcytoscape-legend](#vcytoscape-legend)
+    + [属性](#-属性-)
+    + [事件](#-事件-)
+  * [附录说明](#附录说明)
+    + [category](#category)
+      - [option](#option)
+      - [data](#data)
 
-  ## Demo
+# vcytoscape
+  > 本组件为基于cytoscape的关系图区块。
+  > * 基于数据渲染当前显示的图，添加删除，只要修改数据即可。
+  > * filterByFunction会删除数据，但是会缓存，getAllElements能拿到包含过滤数据的全部数据
+  > * 数据量超过1k，推荐使用[cytoscape-d3-force](https://github.com/shichuanpo/cytoscape.js-d3-force)布局，依赖d3-force, 有布局的进度返回
+
+## 案例
   
   [基础用法](https://shichuanpo.github.io/vcytoscape/demo/index.html)
   [分类颜色](https://shichuanpo.github.io/vcytoscape/demo/category.html)
   [图例用法](https://shichuanpo.github.io/vcytoscape/demo/legend.html)
   [工具栏](https://shichuanpo.github.io/vcytoscape/demo/toolbar.html)
-  ## Usage
+  
+## 快速上手
 
-  Download the library:
+  安装依赖包:
 
   `npm install vcytoscape`
 
-  Import the library for your project:
-
+  添加插件:
+  
+    <font color=#f16464>1.1.8及之前版本Vue.use第二个参数option不能为空</font>
   ```js
   import Vue from 'vue';
   import vcytoscape from 'vcytoscape';
-
+    
   Vue.use( vcytoscape, {
       beforeCreate: (Cytoscape) => { // inject plugin for cytoscape
         Cytoscape.use(d3Force)
@@ -29,90 +48,99 @@
   } );
   ```
 
-  ## components
+## 包含组件
 
-    分为两个组件 vcytoscape 和 vcytoscape-legend
+    该组件分为两个组件 vcytoscape 和 vcytoscape-legend
     
-  ## vcytoscape组件
+## vcytoscape组件
   
-  ### props
+### 属性
   
   参数 | 说明 | 类型 | 可选值 | 默认值
   :-: | :-: | :-: | :-: | :-:
-  option | cytoscape原生配置，包括布局， 样式等等；[cytoscape文档](http://js.cytoscape.org/#introduction) | Object | - | {} | 
-  data | cytoscape的图数据 | Array | - | [] |
-  category | 分类配置，详见下表 | Object | - | {} |
+  [option](#option) | cytoscape原生配置，包括布局， 样式等等；[cytoscape文档](http://js.cytoscape.org/#introduction) | Object | - | {} | 
+  [data](#data) | cytoscape的图数据 | Array | - | [] |
+  [category](#category) | 分类配置，详见下表 | Object | - | {} |
 
-  #### option
+  
+### 方法
 
-  ```javascript
-  option = {
-    layout: {
-      name: 'cose',
-      randomize: true,
-      animate: false
-    },
-    style: [
-      {
-        selector: 'node',
-        style: {
-          'background-color': 'rgb(5, 161, 140)',
-          'background-opacity': 0.6,
-          'background-image-opacity': 0.6,
-          'z-index-compare': 'manual',
-          'z-index': 2
-        }
-      }
-    ],
-    minZoom: 0.5,
-    maxZoom: 10
-  }
-  ```
+<table>
+    <tr>
+      <th>方法名</th>
+      <th>参数</th>
+      <th>说明</th>
+      <th>返回</th>
+    </tr>
+    <tr>
+      <td rowspan="3">filterByFunction</td>
+      <td>Function (elements) { return elements }</td>
+      <td>回调函数返回过滤后的元素集合</td>
+      <td>filterid</td>
+    </tr>
+    <tr>
+      <td>filterid</td>
+      <td>用以重置已有的filterid</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>reLayout</td>
+      <td>过滤集合后是否需要重新布局，默认false</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td rowspan="2">resetFilter</td>
+      <td>filterid</td>
+      <td>重置filterid对应的过滤</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>reLayout</td>
+      <td>过滤集合后是否需要重新布局，默认false</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>getAllElements</td>
+      <td>-</td>
+      <td>获取elements集合，当前显示的元素 + 过滤掉的元素集合</td>
+      <td>elements</td>
+    </tr>
+</table>
 
-  #### data
+### 事件
 
-  ```javascript
-  [{
-    group: 'nodes',
-    data: {
-      id: 'XXX'
-    }
-  }, {
-    group: 'nodes',
-    data: {
-      id: 'YYY'
-    }
-  }, {
-    group: 'edges',
-    data: {
-      id: 'XXX-YYY',
-      source: 'XXX',
-      target: 'YYY'
-  }]
+事件名 | 说明 | 参数
+:-: | :-: | :-:
+update | cytoscape实例数据更新（包括 数据重置，添加，删除，过滤等等） | cytoscape事件
 
-  or
+其他详见cytoscape文档: http://js.cytoscape.org/#introduction
+### 插槽
 
-  {
-    nodes: [{
-      data: {
-        id: 'XXX'
-      }
-    }, {
-      data: {
-        id: 'YYY'
-      }
-    }],
-    edges: [{
-      data: {
-        id: 'XXX-YYY',
-        source: 'XXX',
-        target: 'YYY'
-      }
-    }]
-  }
-  ```
+name | 说明
+:-: | :-:
+legend | scope参数带有 data 和 category
 
-  ### category
+## vcytoscape-legend
+### -属性-
+
+参数 | 说明 | 类型 | 可选值 | 默认值
+:-: | :-: | :-: | :-: | :-:
+value / v-model | 绑定值 | Object | - | -|
+[data](#data) | cytoscape渲染数据 | Array | - | [] |
+[option](https://github.com/shichuanpo/vue-legend) | vue-legendca图例配置 | Object | - | {}| 
+type | 图例类型 | String | nodes/edges | nodes| 
+[category](#category) | 图例分类配置 | Object | - | {}|
+
+
+### -事件-
+
+事件名 | 说明 | 参数
+:-: | :-: | :-:
+change | 图例变化 | legendMode
+
+
+## 附录说明
+### category
 
   <table>
       <tr>
@@ -254,77 +282,71 @@ category = {
     }
   }
 ```
+#### option
 
-### methods
+  ```javascript
+  option = {
+    layout: {
+      name: 'cose',
+      randomize: true,
+      animate: false
+    },
+    style: [
+      {
+        selector: 'node',
+        style: {
+          'background-color': 'rgb(5, 161, 140)',
+          'background-opacity': 0.6,
+          'background-image-opacity': 0.6,
+          'z-index-compare': 'manual',
+          'z-index': 2
+        }
+      }
+    ],
+    minZoom: 0.5,
+    maxZoom: 10
+  }
+  ```
 
-<table>
-    <tr>
-      <th>方法名</th>
-      <th>参数</th>
-      <th>说明</th>
-      <th>返回</th>
-    </tr>
-    <tr>
-      <td rowspan="3">filterByFunction</td>
-      <td>Function (elements) { return elements }</td>
-      <td>回调函数返回过滤后的元素集合</td>
-      <td>filterid</td>
-    </tr>
-    <tr>
-      <td>filterid</td>
-      <td>用以重置已有的filterid</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <td>reLayout</td>
-      <td>过滤集合后是否需要重新布局，默认false</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <td rowspan="2">resetFilter</td>
-      <td>filterid</td>
-      <td>重置filterid对应的过滤</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <td>reLayout</td>
-      <td>过滤集合后是否需要重新布局，默认false</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <td>getAllElements</td>
-      <td>-</td>
-      <td>获取elements集合，当前显示的元素 + 过滤掉的元素集合</td>
-      <td>elements</td>
-    </tr>
-</table>
+  #### data
 
-### events
+  ```javascript
+  [{
+    group: 'nodes',
+    data: {
+      id: 'XXX'
+    }
+  }, {
+    group: 'nodes',
+    data: {
+      id: 'YYY'
+    }
+  }, {
+    group: 'edges',
+    data: {
+      id: 'XXX-YYY',
+      source: 'XXX',
+      target: 'YYY'
+  }]
 
-事件名 | 说明 | 参数
-:-: | :-: | :-:
-update | cytoscape实例数据更新（包括 数据重置，添加，删除，过滤等等） | cytoscape事件
+  or
 
-其他详见cytoscape文档: http://js.cytoscape.org/#introduction
-
-## vcytoscape-legend
-
-### props
-
-参数 | 说明 | 类型 | 可选值 | 默认值
-:-: | :-: | :-: | :-: | :-:
-value / v-model | 绑定值 | Object | - | -|
-data | cytoscape渲染数据 | Array | - | [] |
-option | 图例配置 | Object | - | {}| 
-type | 图例类型 | String | nodes/edges | nodes| 
-category | 图例分类配置 | Object | - | {}|
-
-### category
-
-同上
-
-#### events
-
-事件名 | 说明 | 参数
-:-: | :-: | :-:
-change | 图例变化 | legendMode
+  {
+    nodes: [{
+      data: {
+        id: 'XXX'
+      }
+    }, {
+      data: {
+        id: 'YYY'
+      }
+    }],
+    edges: [{
+      data: {
+        id: 'XXX-YYY',
+        source: 'XXX',
+        target: 'YYY'
+      }
+    }]
+  }
+  ```
