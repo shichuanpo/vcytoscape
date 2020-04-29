@@ -16,6 +16,7 @@
       - [data](#data)
 
 # vcytoscape
+
   > 本组件为基于cytoscape的关系图区块。
   > * 基于数据渲染当前显示的图，添加删除，只要修改数据即可。
   > * filterByFunction会删除数据，但是会缓存，getAllElements能拿到包含过滤数据的全部数据
@@ -61,7 +62,6 @@
   [option](#option) | cytoscape原生配置，包括布局， 样式等等；[cytoscape文档](http://js.cytoscape.org/#introduction) | Object | - | {} | 
   [data](#data) | cytoscape的图数据 | Array | - | [] |
   [category](#category) | 分类配置，详见下表 | Object | - | {} |
-
   
 ### 方法
 
@@ -114,6 +114,7 @@
 update | cytoscape实例数据更新（包括 数据重置，添加，删除，过滤等等） | cytoscape事件
 
 其他详见cytoscape文档: http://js.cytoscape.org/#introduction
+
 ### 插槽
 
 name | 说明
@@ -121,13 +122,14 @@ name | 说明
 legend | scope参数带有 data 和 category
 
 ## vcytoscape-legend
+
 ### -属性-
 
 参数 | 说明 | 类型 | 可选值 | 默认值
 :-: | :-: | :-: | :-: | :-:
 value / v-model | 绑定值 | Object | - | -|
 [data](#data) | cytoscape渲染数据 | Array | - | [] |
-[option](https://github.com/shichuanpo/vue-legend) | vue-legendca图例配置 | Object | - | {}| 
+[option](https://github.com/shichuanpo/vue-legend) | vue-legend图例配置 | Object | - | {}| 
 type | 图例类型 | String | nodes/edges | nodes| 
 [category](#category) | 图例分类配置 | Object | - | {}|
 
@@ -140,6 +142,7 @@ change | 图例变化 | legendMode
 
 
 ## 附录说明
+
 ### category
 
   <table>
@@ -282,6 +285,7 @@ category = {
     }
   }
 ```
+
 #### option
 
   ```javascript
