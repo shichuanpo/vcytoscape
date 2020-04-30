@@ -60,11 +60,15 @@ export default {
     legendData () {
       return this.categorys.map(name => {
         const { style, formatter } = this.categoryParams[name] || {}
-        const { backgroundColor, backgroundImage, backgroundPosition, backgroundRepeat, backgroundSize, borderColor } = style
+        const { backgroundColor, backgroundImage, backgroundPosition, backgroundRepeat, backgroundSize, borderColor, borderStyle } = style
         return Object.assign({}, {
-          activeTagStyle: { backgroundColor, backgroundImage, backgroundPosition, backgroundRepeat, backgroundSize, borderColor },
+          activeTagStyle: { backgroundColor, borderColor },
           tagStyle: {
-            borderStyle: style.borderStyle
+            backgroundPosition,
+            backgroundImage,
+            backgroundRepeat,
+            backgroundSize,
+            borderStyle
           },
           activeTextStyle: { color: style.borderColor || style.backgroundColor },
           formatter
