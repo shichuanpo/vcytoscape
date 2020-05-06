@@ -37,7 +37,7 @@
 
   添加插件:
   
-    <font color=#f16464>1.1.8及之前版本Vue.use第二个参数option不能为空</font>
+  <font color=#f16464>1.1.8及之前版本Vue.use第二个参数option不能为空</font>
   ```js
   import Vue from 'vue';
   import vcytoscape from 'vcytoscape';
