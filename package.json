@@ -1,6 +1,6 @@
 {
   "name": "vcytoscape",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "main": "lib/vcytoscape.common.js",
   "author": "shichuanpo <yangdongfeng8@126.com>",
   "scripts": {
@@ -42,6 +42,6 @@
   "dependencies": {
     "cytoscape": "^3.12.1",
     "vue-form-generator": "^2.3.4",
-    "vue-legend": "^1.1.5"
+    "vue-legend": "^1.1.6"
   }
 }
