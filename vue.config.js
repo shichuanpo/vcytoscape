@@ -11,7 +11,7 @@ module.exports = {
     extract: false
   },
   configureWebpack: {
-    externals: process.env.NODE_ENV === 'production' ? {
+    externals: process.argv[4] === 'lib' ? {
        'vue': 'vue',
        'element-ui': 'element-ui'
     } : {}
