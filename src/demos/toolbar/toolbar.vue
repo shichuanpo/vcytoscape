@@ -2,7 +2,7 @@
   .cytoscape-toolbar(:class="[toolbarOption.orient]", :style="toolbarOption.style")
       template(v-for="item in filterToolbar")
         select(v-if="item.name==='layout'", v-model="layoutName")
-          option(value="d3-force") 力导布局
+          //- option(value="d3-force") 力导布局
           option(value="grid") 网格
           option(value="circle") 圆
           option(value="concentric") 同心圆

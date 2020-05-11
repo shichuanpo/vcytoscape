@@ -12,8 +12,9 @@
     + [事件](#-事件-)
   * [附录说明](#附录说明)
     + [category](#category)
-      - [option](#option)
-      - [data](#data)
+    + [option](#option)
+    + [data](#data)
+    + [toolbar](#toolbar)
 
 # vcytoscape
 
@@ -21,6 +22,7 @@
   > * 基于数据渲染当前显示的图，添加删除，只要修改数据即可。
   > * filterByFunction会删除数据，但是会缓存，getAllElements能拿到包含过滤数据的全部数据
   > * 数据量超过1k，推荐使用[cytoscape-d3-force](https://github.com/shichuanpo/cytoscape.js-d3-force)布局，依赖d3-force, 有布局的进度返回
+  > * 本组件依 赖vue 和 element-ui 保证项目已安装这两个依赖 ❗️
 
 ## 案例
   
@@ -28,6 +30,7 @@
   [分类颜色](https://shichuanpo.github.io/vcytoscape/demo/category.html)
   [图例用法](https://shichuanpo.github.io/vcytoscape/demo/legend.html)
   [工具栏](https://shichuanpo.github.io/vcytoscape/demo/toolbar.html)
+  [分类编辑](https://shichuanpo.github.io/vcytoscape/demo/editable.html)
   
 ## 快速上手
 
@@ -37,21 +40,21 @@
 
   添加插件:
   
-  <font color=#f16464>1.1.8及之前版本Vue.use第二个参数option不能为空</font>
+  1.1.8及之前版本Vue.use第二个参数option不能为空❗️
   ```js
   import Vue from 'vue';
   import vcytoscape from 'vcytoscape';
-    
-  Vue.use( vcytoscape, {
+  import d3Force from 'cytoscape-d3-force'
+  Vue.use(vcytoscape, {
       beforeCreate: (Cytoscape) => { // inject plugin for cytoscape
         Cytoscape.use(d3Force)
       }
-  } );
+  });
   ```
 
 ## 包含组件
 
-    该组件分为两个组件 vcytoscape 和 vcytoscape-legend
+    该组件分为两个组件 vcytoscape 和 vcytoscape-legend （建议用slot方式插入cytoscape，不然编辑状态下图例无法更新❗️）
     
 ## vcytoscape组件
   
@@ -62,6 +65,8 @@
   [option](#option) | cytoscape原生配置，包括布局， 样式等等；[cytoscape文档](http://js.cytoscape.org/#introduction) | Object | - | {} | 
   [data](#data) | cytoscape的图数据 | Array | - | [] |
   [category](#category) | 分类配置，详见下表 | Object | - | {} |
+  [toolbar](#toolbar) | 工具栏 | Object | - | {} |
+  behavior | 默认行为（点击高亮相邻节点）| Boolean | true/false | true |
   
 ### 方法
 
@@ -112,6 +117,7 @@
 事件名 | 说明 | 参数
 :-: | :-: | :-:
 update | cytoscape实例数据更新（包括 数据重置，添加，删除，过滤等等） | cytoscape事件
+setting:category | 分类编辑后的更新 | params: { type(点/边), name(分类名称), style(分类样式) }
 
 其他详见cytoscape文档: http://js.cytoscape.org/#introduction
 
@@ -120,6 +126,8 @@ update | cytoscape实例数据更新（包括 数据重置，添加，删除，�
 name | 说明
 :-: | :-:
 legend | scope参数带有 data 和 category
+toolbar-before | 工具栏（前面）
+toolbar-after| 工具栏 （后面）
 
 ## vcytoscape-legend
 
@@ -132,6 +140,7 @@ value / v-model | 绑定值 | Object | - | -|
 [option](https://github.com/shichuanpo/vue-legend) | vue-legend图例配置 | Object | - | {}| 
 type | 图例类型 | String | nodes/edges | nodes| 
 [category](#category) | 图例分类配置 | Object | - | {}|
+editable(试用) | 分类可编辑 | Boolean | true/false | false
 
 
 ### -事件-
@@ -139,6 +148,7 @@ type | 图例类型 | String | nodes/edges | nodes|
 事件名 | 说明 | 参数
 :-: | :-: | :-:
 change | 图例变化 | legendMode
+setting | 分类编辑点击事件 | params: { type, name, label }
 
 
 ## 附录说明
@@ -286,7 +296,7 @@ category = {
   }
 ```
 
-#### option
+### option
 
   ```javascript
   option = {
@@ -312,7 +322,7 @@ category = {
   }
   ```
 
-  #### data
+### data
 
   ```javascript
   [{
@@ -354,3 +364,9 @@ category = {
     }]
   }
   ```
+#### toolbar
+参数 | 说明 | 类型 | 可选值 | 默认值
+:-: | :-: | :-: | :-: | :-:
+style | 样式 | Object | vue的内联样式 | - |
+content | 工具栏显示内容 | Boolean/Array | true: 显示全部默认；false: 不显示默认；可选值：[center,zoomin,zoomout,download,fullscreen] | false |
+orient | 工具栏的方向 | String | horizontal/vertical | horizontal | 

@@ -1,14 +1,12 @@
 import Vue from 'vue'
 import demo from './index.vue'
 import vcytoscape from '../../vcytoscape'
-import d3Force from 'cytoscape-d3-force'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 import './iconfont/iconfont.css'
 Vue.config.productionTip = false
-Vue.use(vcytoscape, {
-  beforeCreate: (Cytoscape) => {
-    Cytoscape.use(d3Force)
-  }
-})
+Vue.use(ElementUI)
+Vue.use(vcytoscape)
 new Vue({
   render: h => h(demo)
 }).$mount('#app')

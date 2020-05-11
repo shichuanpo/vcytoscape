@@ -30,6 +30,7 @@
     "style": { "font-size": "9px", "color": "#626867", "z-index": 1 }
   }],
   "layout": {
-    "name": "random"
+    "name": "cose",
+    "animate": true
   }
 }

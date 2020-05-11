@@ -4,10 +4,17 @@ module.exports = {
     index: 'src/demos/default/main.js',
     toolbar: 'src/demos/toolbar/main.js',
     category: 'src/demos/category/main.js',
-    legend: 'src/demos/legend/main.js'
+    legend: 'src/demos/legend/main.js',
+    editable: 'src/demos/editable/main.js'
   },
   css: {
     extract: false
+  },
+  configureWebpack: {
+    externals: process.env.NODE_ENV === 'production' ? {
+       'vue': 'vue',
+       'element-ui': 'element-ui'
+    } : {}
   },
   publicPath: process.env.NODE_ENV === 'production'
     ? '/vcytoscape/demo/'

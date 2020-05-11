@@ -1,0 +1,199 @@
+[{
+  "model": "width",
+  "label": "宽度",
+  "default": "",
+  "type": "input",
+  "inputType": "text"
+}, {
+  "model": "curve-style",
+  "label": "曲线形状",
+  "default": "haystack",
+  "type": "select",
+  "values": [{
+    "name": "简单直线",
+    "id": "haystack"
+  }, {
+    "name": "直线",
+    "id": "straight"
+  }, {
+    "name": "贝塞尔曲线",
+    "id": "bezier"
+  }, {
+    "name": "分段",
+    "id": "segments"
+  }, {
+    "name": "折线",
+    "id": "taxi"
+  }],
+  "selectOptions": {
+    "hideNoneSelectedText": true
+  }
+}, {
+  "model": "line-style",
+  "label": "线条样式",
+  "default": "solid",
+  "type": "select",
+  "values": [{
+    "name": "实线",
+    "id": "solid"
+  }, {
+    "name": "点状线",
+    "id": "dotted"
+  }, {
+    "name": "虚线",
+    "id": "dashed"
+  }],
+  "selectOptions": {
+    "hideNoneSelectedText": true
+  }
+}, {
+  "model": "line-color",
+  "label": "线条颜色",
+  "type": "elColorPicker"
+}, {
+  "model": "line-cap",
+  "label": "边缘线样式",
+  "default": "butt",
+  "type": "select",
+  "values": [{
+    "name": "点",
+    "id": "butt"
+  }, {
+    "name": "圆",
+    "id": "round"
+  }, {
+    "name": "方形",
+    "id": "square"
+  }],
+  "selectOptions": {
+    "hideNoneSelectedText": true
+  }
+}, {
+  "model": "source-arrow-color",
+  "label": "起点箭头颜色",
+  "type": "elColorPicker"
+}, {
+  "model": "source-arrow-shape",
+  "label": "起点箭头形状",
+  "default": "triangle",
+  "type": "select",
+  "values": [{
+    "name": "三角形",
+    "id": "triangle"
+  }, {
+    "name": "T形三角形",
+    "id": "triangle-tee"
+  }, {
+    "name": "交叉三角形",
+    "id": "triangle-cross"
+  }, {
+    "name": "V形",
+    "id": "vee"
+  }, {
+    "name": "T形",
+    "id": "tee"
+  }, {
+    "name": "正方形",
+    "id": "square"
+  }, {
+    "name": "圆形",
+    "id": "circle"
+  }, {
+    "name": "菱形",
+    "id": "diamond"
+  }, {
+    "name": "V形线条",
+    "id": "chevron"
+  }, {
+    "name": "空",
+    "id": "none"
+  }],
+  "selectOptions": {
+    "hideNoneSelectedText": true
+  }
+}, {
+  "model": "source-arrow-fill",
+  "label": "起点箭头填充",
+  "default": "filled",
+  "type": "select",
+  "values": [{
+    "name": "实心",
+    "id": "filled"
+  }, {
+    "name": "空心",
+    "id": "hollow"
+  }],
+  "selectOptions": {
+    "hideNoneSelectedText": true
+  }
+}, {
+  "model": "target-arrow-color",
+  "label": "起点箭头颜色",
+  "type": "elColorPicker"
+}, {
+  "model": "target-arrow-shape",
+  "label": "起点箭头形状",
+  "default": "triangle",
+  "type": "select",
+  "values": [{
+    "name": "三角形",
+    "id": "triangle"
+  }, {
+    "name": "T形三角形",
+    "id": "triangle-tee"
+  }, {
+    "name": "交叉三角形",
+    "id": "triangle-cross"
+  }, {
+    "name": "V形",
+    "id": "vee"
+  }, {
+    "name": "T形",
+    "id": "tee"
+  }, {
+    "name": "正方形",
+    "id": "square"
+  }, {
+    "name": "圆形",
+    "id": "circle"
+  }, {
+    "name": "菱形",
+    "id": "diamond"
+  }, {
+    "name": "V形线条",
+    "id": "chevron"
+  }, {
+    "name": "空",
+    "id": "none"
+  }],
+  "selectOptions": {
+    "hideNoneSelectedText": true
+  }
+}, {
+  "model": "target-arrow-fill",
+  "label": "起点箭头填充",
+  "default": "filled",
+  "type": "select",
+  "values": [{
+    "name": "实心",
+    "id": "filled"
+  }, {
+    "name": "空心",
+    "id": "hollow"
+  }],
+  "selectOptions": {
+    "hideNoneSelectedText": true
+  }
+}, {
+  "model": "source-distance-from-node",
+  "label": "起点实体距离",
+  "default": "",
+  "type": "input",
+  "inputType": "number"
+}, {
+  "model": "target-distance-from-node",
+  "label": "目标实体距离",
+  "default": "",
+  "type": "input",
+  "inputType": "number"
+}]

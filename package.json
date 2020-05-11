@@ -1,11 +1,11 @@
 {
   "name": "vcytoscape",
-  "version": "1.1.9",
+  "version": "1.2.0",
   "main": "lib/vcytoscape.common.js",
   "author": "shichuanpo <yangdongfeng8@126.com>",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --dest demo && vue-cli-service build --target lib --name vcytoscape src/plugin.js --dest lib",
+    "build": "vue-cli-service build --dest demo && vue-cli-service build --target lib --name vcytoscape src/vcytoscape/index.js --dest lib",
     "lint": "vue-cli-service lint"
   },
   "repository": {
@@ -22,7 +22,8 @@
   "homepage": "https://github.com/shichuanpo/vcytoscape",
   "peerDependencies": {
     "core-js": "^3.4.4",
-    "vue": "^2.6.10"
+    "vue": "^2.6.10",
+    "element-ui": "^2.13.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.1.0",
@@ -39,6 +40,8 @@
     "pug-plain-loader": "^1.0.0"
   },
   "dependencies": {
-    "vue-legend": "^1.1.4"
+    "cytoscape": "^3.12.1",
+    "vue-form-generator": "^2.3.4",
+    "vue-legend": "^1.1.5"
   }
 }
