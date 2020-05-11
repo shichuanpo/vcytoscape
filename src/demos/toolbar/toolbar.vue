@@ -27,10 +27,8 @@ export default {
           'right': '10px',
           'top': '10px'
         },
-        placement: 'bottom',
         content: true,
-        orient: 'horizontal',
-        itemGap: 5
+        orient: 'horizontal'
       },
       toolbarList: [{
         icon: 'iconlayout',

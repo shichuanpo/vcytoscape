@@ -23,10 +23,7 @@ export default {
     return {
       layoutName: '',
       defaultOption: {
-        style: {
-          'right': '10px',
-          'top': '10px'
-        },
+        style: {},
         content: false,
         orient: 'horizontal'
       },
