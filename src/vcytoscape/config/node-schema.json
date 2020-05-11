@@ -161,7 +161,7 @@
   }
 }, {
   "model": "background-blacken",
-  "label": "背景亮度",
+  "label": "背景暗度",
   "value": 0,
   "type": "input",
   "inputType": "range",
