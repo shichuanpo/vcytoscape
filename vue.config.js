@@ -5,13 +5,14 @@ module.exports = {
     toolbar: 'src/demos/toolbar/main.js',
     category: 'src/demos/category/main.js',
     legend: 'src/demos/legend/main.js',
-    editable: 'src/demos/editable/main.js'
+    editable: 'src/demos/editable/main.js',
+    integrate: 'src/demos/integrate/main.js'
   },
   css: {
     extract: false
   },
   configureWebpack: {
-    externals: process.argv[4] === 'lib' ? {
+    externals: process.env.NODE_ENV === 'lib' ? {
        'vue': 'vue',
        'element-ui': 'element-ui'
     } : {}

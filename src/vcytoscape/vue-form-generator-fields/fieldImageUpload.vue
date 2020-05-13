@@ -31,9 +31,7 @@ export default {
         backgroundPosition: 'center',
         backgroundImage: `url(${this.value})`,
         backgroundRepeat: this.model['background-repeat'],
-        backgroundSize: (!this.model['background-fit'] || this.model['background-fit'] === 'none')
-          ? `${this.model['background-width']} ${this.model['background-height']}`
-          : '100% 100%'
+        backgroundSize: 'contain'
       }
     },
     hasImage () {

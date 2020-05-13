@@ -128,11 +128,11 @@
   }
 }, {
   "model": "target-arrow-color",
-  "label": "起点箭头颜色",
+  "label": "目标箭头颜色",
   "type": "elColorPicker"
 }, {
   "model": "target-arrow-shape",
-  "label": "起点箭头形状",
+  "label": "目标箭头形状",
   "default": "triangle",
   "type": "select",
   "values": [{
@@ -171,7 +171,7 @@
   }
 }, {
   "model": "target-arrow-fill",
-  "label": "起点箭头填充",
+  "label": "目标箭头填充",
   "default": "filled",
   "type": "select",
   "values": [{

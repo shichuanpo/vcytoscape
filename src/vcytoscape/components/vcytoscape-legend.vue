@@ -117,9 +117,7 @@ export default {
           'backgroundImage': params[key].style['background-image'] ? `url(${params[key].style['background-image']})` : 'none',
           'backgroundPosition': 'center',
           'backgroundRepeat': params[key].style['background-repeat'],
-          'backgroundSize': (!params[key].style['background-fit'] || params[key].style['background-fit'] === 'none')
-            ? `${params[key].style['background-width']} ${params[key].style['background-height']}`
-            : '100% 100%',
+          'backgroundSize': 'contain',
           // 'borderWidth': _isNodes ? (params[key].style['border-width'] && params[key].style['border-width'] + 'px') || '1px' : (params[key].style['width'] && params[key].style['width'] + 'px') || '1px',
           'borderColor': _isNodes ? params[key].style['border-color'] : params[key].style['line-color'],
           'borderStyle': _isNodes ? params[key].style['border-style'] || 'not specified' : params[key].style['line-style'] || 'not specified'

@@ -31,6 +31,7 @@
   [图例用法](https://shichuanpo.github.io/vcytoscape/demo/legend.html)
   [工具栏](https://shichuanpo.github.io/vcytoscape/demo/toolbar.html)
   [分类编辑](https://shichuanpo.github.io/vcytoscape/demo/editable.html)
+  [综合案例](https://shichuanpo.github.io/vcytoscape/demo/integrate.html)
   
 ## 快速上手
 
