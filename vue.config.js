@@ -15,15 +15,7 @@ module.exports = {
     output: {
       libraryExport: 'default',
       libraryTarget: 'umd'
-    },
-    externals: process.env.NODE_ENV === 'lib' ? {
-      'element-ui': {
-        commonjs: 'element-ui',
-        commonjs2: 'element-ui',
-        amd: 'element-ui',
-        root: 'ELEMENT'
-      }
-    } : {}
+    }
   },
   publicPath: process.env.NODE_ENV === 'production'
     ? '/vcytoscape/demo/'
