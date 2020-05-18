@@ -1,6 +1,6 @@
 <template lang="pug">
 .cytoscape
-  vcytoscape.cytoscape(ref="cytoscape", :option="cytoscapeOption", :category="category", :toolbar="toolbarOption", :data="graphData", @mouseover="createTippy")
+  vcytoscape.cytoscape(ref="cytoscape", :option="cytoscapeOption", :category="category", :toolbar="toolbarOption", :data="graphData", @mouseover="createTippy", @setting:category="categoryChange")
     template(v-slot:legend="scope")
       vcytoscape-legend(:data="scope.data", v-model="legendNodeModel", :option="legend.nodes", :category="scope.category", editable)
       vcytoscape-legend(:data="scope.data", v-model="legendEdgeModel", type="edges", :option="legend.edges", :category="scope.category", editable)
@@ -159,6 +159,9 @@ export default {
     }
   },
   methods: {
+    categoryChange (item) {
+      console.log('--------', item)
+    },
     legendChange (legendModel, type) {
       let _cy = this.$refs.cytoscape
       let _categoryNames = Object.keys(legendModel).filter(key => !legendModel[key])

@@ -34,7 +34,7 @@ export default {
         _categorys.forEach(({ name, matching, style, status, formatter }) => {
           (this.unifyData[type] || []).forEach(({ data }) => {
             if (matching && matching(data)) {
-              let _name = isFunction(name) ? name(data) : name
+              const _name = isFunction(name) ? name(data) : name
               const exist = newCategorys.find(({ name }) => name === _name)
               if (!exist) {
                 newCategorys.push({ name: _name, matching, style, status, formatter })

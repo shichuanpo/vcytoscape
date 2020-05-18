@@ -144,8 +144,8 @@ function debounce (fn, delay, ctx) {
   }
 }
 function filterParams (obj) {
-  let _newPar = {}
-  for (let key in obj) {
+  const _newPar = {}
+  for (const key in obj) {
     if (
       (obj[key] === 0 || obj[key]) &&
       obj[key].toString().replace(/(^\s*)|(\s*$)/g, '') !== ''

@@ -12,9 +12,17 @@ module.exports = {
     extract: false
   },
   configureWebpack: {
+    output: {
+      libraryExport: 'default',
+      libraryTarget: 'umd'
+    },
     externals: process.env.NODE_ENV === 'lib' ? {
-       'vue': 'vue',
-       'element-ui': 'element-ui'
+      'element-ui': {
+        commonjs: 'element-ui',
+        commonjs2: 'element-ui',
+        amd: 'element-ui',
+        root: 'ELEMENT'
+      }
     } : {}
   },
   publicPath: process.env.NODE_ENV === 'production'
