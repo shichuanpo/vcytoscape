@@ -1,5 +1,5 @@
 <template lang="pug">
-  vue-legend(:data="legendData", :option="option", v-model="legendModel", @setting="settingHandler")
+  vue-legend(:data="legendData", :option="option", v-model="legendModel", @setting="settingHandler", :editable="editable")
 </template>
 <script>
 import { merge, colorRgba } from '../common/util.js'
@@ -48,6 +48,9 @@ export default {
     }
   },
   computed: {
+    editable () {
+      return !!Object.entries(this.$listeners).find(([type]) => type === 'setting')
+    },
     categoryInType () {
       return this.mergeCategorys && this.mergeCategorys[this.type]
     },
