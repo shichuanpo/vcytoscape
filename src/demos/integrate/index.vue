@@ -1,9 +1,9 @@
 <template lang="pug">
 .cytoscape
-  vcytoscape.cytoscape(ref="cytoscape", :option="cytoscapeOption", :category="category", :toolbar="toolbarOption", :data="graphData", @mouseover="createTippy", @setting:category="categoryChange")
+  vcytoscape.cytoscape(ref="cytoscape", :option="cytoscapeOption", :category="category", :toolbar="toolbarOption", :data="graphData", @mouseover="createTippy")
     template(v-slot:legend="scope")
-      vcytoscape-legend(:data="scope.data", v-model="legendNodeModel", :option="legend.nodes", :category="scope.category", editable)
-      vcytoscape-legend(:data="scope.data", v-model="legendEdgeModel", type="edges", :option="legend.edges", :category="scope.category", editable)
+      vcytoscape-legend(:data="scope.data", v-model="legendNodeModel", :option="legend.nodes", :category="scope.category", @setting="settingHandler")
+      vcytoscape-legend(:data="scope.data", v-model="legendEdgeModel", type="edges", :option="legend.edges", :category="scope.category", @setting="settingHandler")
     template(v-slot:toolbar-before="scope")
       el-popover(
         placement="bottom",
@@ -12,9 +12,17 @@
         el-radio(v-model="layout", v-for="l in layoutList", :key="l.name", :label="l.name") {{l.label}}
         i.el-icon-s-grid(slot="reference")
   filter-panel(v-model="filters")
+  transition(name="setting-fade")
+    .right-container(v-if="settingVisible")
+      header.header
+        .title {{settingModel.title}}
+        a.close(@click="settingVisible = false") ×
+      section.body
+        vcytoscape-setting(v-model="settingModel.form", :type="settingModel.type")
 </template>
 
 <script>
+
 import category from './category'
 import option from './option'
 import legend from './legend'
@@ -128,7 +136,12 @@ export default {
       legendNodeModel: {},
       legendEdgeModel: {},
       filters: {},
-      filtersId: ''
+      filtersId: '',
+      settingVisible: false,
+      settingModel: {
+        form: null,
+        type: 'nodes'
+      }
     }
   },
   computed: {
@@ -159,8 +172,15 @@ export default {
     }
   },
   methods: {
-    categoryChange (item) {
-      console.log('--------', item)
+    settingHandler (item) {
+      this.settingVisible = true
+      this.settingModel.type = item.type
+      this.settingModel.title = item.label
+      if (item.type === 'nodes') {
+        this.settingModel.form = category.nodes.styles[item.name]
+      } else {
+        this.settingModel.form = category[item.type].find(({ name }) => item.name === name).style
+      }
     },
     legendChange (legendModel, type) {
       let _cy = this.$refs.cytoscape
@@ -353,11 +373,56 @@ export default {
     display: inline-block;
     margin: 0 5px;
     text-align: center;
-    color: rgba(0,0,0,.65);
-    font-size: 14px;
+    color: rgba(0, 0, 0, 0.55);
+    font-size: 18px;
+    vertical-align: -0.15em;
+    overflow: hidden;
   }
   .el-radio{
     display: block;
     margin: 5px;
+  }
+  .right-container{
+  width: 30%;
+  height: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #fff;
+  z-index: 1001;
+  overflow: hidden;
+  color: #72767b;
+  box-shadow: 0 8px 10px -5px rgba(0,0,0,.2), 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12);
+  display: flex;
+  flex-direction: column;
+  .header{
+    height: 35px;
+    line-height: 35px;
+    padding: 0 5px;
+    margin-bottom: 10px;
+    .title{
+      font-size: 16px;
+      font-weight: 400;
+    }
+    .close{
+      font-size: 25px;
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      cursor: pointer;
+    }
+  }
+  .body{
+    flex: 1;
+    overflow: auto;
+  }
+}
+  .setting-fade-enter-active, .setting-fade-leave-active{
+    transition: all .15s ease;
+  }
+  .setting-fade-enter, .setting-fade-leave-to{
+    transform: translateX(100%);
   }
 </style>

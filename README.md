@@ -10,6 +10,8 @@
   * [vcytoscape-legend](#vcytoscape-legend)
     + [属性](#-属性-)
     + [事件](#-事件-)
+  * [vcytoscape-setting](#vcytoscape-setting)
+    + [属性](#属性-)
   * [附录说明](#附录说明)
     + [category](#category)
     + [option](#option)
@@ -52,10 +54,15 @@
       }
   });
   ```
+  
+  获取配置的schema❗️
+  ```js
+  import { nodeSchema, edgeSchema } from 'vcytoscape'
+  ```
 
 ## 包含组件
 
-    该组件分为两个组件 vcytoscape 和 vcytoscape-legend （建议用slot方式插入cytoscape，不然编辑状态下图例无法更新❗️）
+    该组件分为三个组件 vcytoscape 、 vcytoscape-legend 、 vcytoscape-setting
     
 ## vcytoscape组件
   
@@ -140,8 +147,7 @@ value / v-model | 绑定值 | Object | - | -|
 [data](#data) | cytoscape渲染数据 | Array | - | [] |
 [option](https://github.com/shichuanpo/vue-legend) | vue-legend图例配置 | Object | - | {}| 
 type | 图例类型 | String | nodes/edges | nodes| 
-[category](#category) | 图例分类配置 | Object | - | {}|
-editable(试用) | 分类可编辑 | Boolean | true/false | false
+[category](#category) | 图例分类配置 | Object | - | {} |
 
 
 ### -事件-
@@ -150,6 +156,15 @@ editable(试用) | 分类可编辑 | Boolean | true/false | false
 :-: | :-: | :-:
 change | 图例变化 | legendMode
 setting | 分类编辑点击事件 | params: { type, name, label }
+
+## vcytoscape-setting
+
+### 属性-
+
+参数 | 说明 | 类型 | 可选值 | 默认值
+:-: | :-: | :-: | :-: | :-:
+value / v-model | 配置表单 | Object | - | -|
+type | 表单类型 | String | nodes/edges | nodes |
 
 
 ## 附录说明

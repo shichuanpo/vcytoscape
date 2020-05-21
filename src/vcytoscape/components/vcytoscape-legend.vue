@@ -1,11 +1,10 @@
 <template lang="pug">
-  vue-legend(:data="legendData", :option="option", v-model="legendModel", @setting="settingHandler", :editable="editable")
+  vue-legend(:data="legendData", :option="option", v-model="legendModel", @setting="settingHandler")
 </template>
 <script>
 import { merge, colorRgba } from '../common/util.js'
 import { categoryOption } from '../config/index.js'
 import { vueLegend } from 'vue-legend'
-import { bus } from '../common/eventBus.js'
 import mixin from '../mixins'
 export default {
   name: 'vcytoscapeLegend',
@@ -36,10 +35,6 @@ export default {
     },
     model: {
       type: Object
-    },
-    editable: {
-      type: Boolean,
-      default: false
     }
   },
   model: {
@@ -96,12 +91,10 @@ export default {
   },
   methods: {
     settingHandler (item) {
-      ;[this, bus].forEach(instance => {
-        instance.$emit('setting', {
-          type: this.type,
-          name: item.name,
-          label: item.formatter ? item.formatter(item.name) : item.name
-        })
+      this.$emit('setting', {
+        type: this.type,
+        name: item.name,
+        label: item.formatter ? item.formatter(item.name) : item.name
       })
     },
     /****

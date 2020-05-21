@@ -2,26 +2,16 @@
   .cytoscape--container
     .cytoscape--container__graph(ref="cytoscapeBox")
     slot(:data="data", :category="mergeCategorys", name="legend")
-    toolbar(:toolbar="toolbar", :data="data", :category="category", @eventHandler="toolbarClickHandler")
+    toolbar(:toolbar="toolbar", @eventHandler="toolbarClickHandler")
       template(v-slot:toolbar-before)
         slot(name="toolbar-before", :data="data", :category="category")
       template(v-slot:toolbar-after)
         slot(name="toolbar-after", :data="data", :category="category")
-    transition(name="setting-fade")
-      setting-form(
-        v-if="settingParams.visible",
-        v-model="settingStyle",
-        @close="settingParams.visible=false",
-        :type="settingParams.type",
-        :title="settingParams.title",
-      )
 </template>
 <script>
 import cytoscape from 'cytoscape'
 import toolbar from './toolbar'
 import createEvents from '../common/createEvents'
-import settingForm from './setting-form'
-import { bus } from '../common/eventBus'
 import { merge, mergeArrayConcat, createId, debounce } from '../common/util'
 import { categoryOption, cytoscapeOption } from '../config'
 import mixin from '../mixins'
@@ -50,7 +40,7 @@ export default {
       default: true
     }
   },
-  components: { toolbar, settingForm },
+  components: { toolbar },
   data () {
     return {
       layoutName: '',
@@ -60,17 +50,7 @@ export default {
       filters: {},
       $layout: null,
       $removeData: null,
-      oldLayout: null,
-      settingStyles: {
-        nodes: {},
-        edges: {}
-      },
-      settingParams: {
-        type: 'nodes',
-        title: '',
-        name: '',
-        visible: false
-      }
+      oldLayout: null
     }
   },
   computed: {
@@ -83,16 +63,6 @@ export default {
         _categoryNameToClass[`edges_${name}`] = this.getCacheRandomId(`edges_${name}`, 'edge_class_')
       })
       return _categoryNameToClass
-    },
-    settingStyle: {
-      get () {
-        return ((this.settingStyles[this.settingParams.type] || {})[this.settingParams.name]) || {}
-      },
-      set (val) {
-        this.settingStyles = this.settingStyles || {}
-        this.settingStyles[this.settingParams.type] = this.settingStyles[this.settingParams.type] || {}
-        this.$set(this.settingStyles[this.settingParams.type], this.settingParams.name, val)
-      }
     },
     categoryConfig () {
       let _categoryStyles = []
@@ -138,34 +108,15 @@ export default {
         this.$cytoscapeInstance && this.setOptions(newValue, reLayout)
       },
       deep: true
-    },
-    settingStyle: {
-      handler (newValue) {
-        this.$emit('setting:category', {
-          name: this.settingParams.name,
-          category: this.mergeCategorys
-        })
-      },
-      deep: true
     }
   },
   methods: {
-    settingHandler ({ label, type, name }) {
-      const { style } = this.categoryConfig.styles.find(({ selector }) => selector === `.${this.categoryNameToClass[type + '_' + name]}`) || {}
-      this.$set(this, 'settingParams', {
-        title: `${type === 'nodes' ? '节点' : '边'}(${label})`,
-        type,
-        visible: true,
-        name
-      })
-      this.settingStyle = style || {}
-    },
-    toolbarClickHandler (type, layoutName) {
+    toolbarClickHandler (type) {
       const func = this[type + 'Handler']
-      func && func(layoutName)
+      func && func()
     },
-    layoutHandler (layoutName) {
-      this.layoutName = layoutName || ''
+    fitHandler () {
+      this.$cytoscapeInstance && this.$cytoscapeInstance.fit()
     },
     centerHandler () {
       if (this.$cytoscapeInstance) {
@@ -437,21 +388,13 @@ export default {
   },
   mounted () {
     this.setData(this.unifyData)
-    bus.$on('setting', this.settingHandler)
   },
   beforeDestroy () {
     this.destroy()
-    bus.$off('setting', this.settingHandler)
   }
 }
 </script>
 <style lang="less" scoped>
-.setting-fade-enter-active, .setting-fade-leave-active{
-  transition: all .15s ease;
-}
-.setting-fade-enter, .setting-fade-leave-to{
-  transform: translateX(100%);
-}
 .cytoscape--container {
   text-align: left;
   position: relative;

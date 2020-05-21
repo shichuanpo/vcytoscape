@@ -2,17 +2,18 @@
   .cytoscape-toolbar(:class="[toolbarOption.orient]", :style="toolbarOption.style")
       slot(name="toolbar-before")
       template(v-for="item in filterToolbar")
-        i.iconfont(
-          :class="item.icon",
+        a.tool-btn(
           @click="toolbarClickHandler(item.name)"
         )
+          svg-icon.tool-btn-icon(:icon-name="item.icon")
       slot(name="toolbar-after")
 </template>
 <script>
 import { merge } from '../../common/util'
-import '../../style/iconfont/iconfont.css'
+import svgIcon from './svg-icon.vue'
 export default {
   name: 'cytoscape-toolbar',
+  components: { svgIcon },
   props: {
     toolbar: {
       type: Object,
@@ -21,30 +22,33 @@ export default {
   },
   data () {
     return {
-      layoutName: '',
       defaultOption: {
         style: {},
         content: false,
         orient: 'horizontal'
       },
       toolbarList: [{
-        icon: 'icontarget',
+        icon: 'fit',
+        name: 'fit',
+        label: '适应屏幕'
+      }, {
+        icon: 'center',
         name: 'center',
         label: '回到中心'
       }, {
-        icon: 'iconzoomin',
+        icon: 'zoomin',
         name: 'zoomin',
         label: '放大'
       }, {
-        icon: 'iconzoomout',
+        icon: 'zoomout',
         name: 'zoomout',
         label: '缩小'
       }, {
-        icon: 'icondownload',
+        icon: 'download',
         name: 'download',
         label: '下载'
       }, {
-        icon: 'iconfullscreen',
+        icon: 'fullscreen-enter',
         name: 'fullscreen',
         label: '全屏'
       }]
@@ -67,14 +71,15 @@ export default {
       return []
     }
   },
-  watch: {
-    layoutName (name) {
-      this.toolbarClickHandler('layout', name)
-    }
-  },
   methods: {
-    toolbarClickHandler (type, layoutName) {
-      this.$emit('eventHandler', type, layoutName)
+    toolbarClickHandler (type) {
+      if (type === 'fullscreen') {
+        const fullscreenItem = this.toolbarList[this.toolbarList.length - 1]
+        fullscreenItem.icon = ~fullscreenItem.icon.indexOf('enter')
+          ? 'fullscreen-exit'
+          : 'fullscreen-enter'
+      }
+      this.$emit('eventHandler', type)
     }
   }
 }
@@ -87,24 +92,25 @@ export default {
     border-radius: 4px;
     z-index: 10;
     width: auto;
+    padding: 8px;
+    box-sizing: border-box;
     &.vertical{
-      width: 32px;
+      width: 36px;
       border-radius: 4px;
       z-index: 10;
-      i{
+      .tool-btn{
         margin: 10px auto;
         display: block;
       }
     }
     &.horizontal{
       height: 36px;
-      line-height: 36px;
-      i{
+      .tool-btn{
         margin: 0 5px;
         display: inline-block;
       }
     }
-    i {
+    .tool-btn {
       line-height: 1.5;
       position: relative;
       display: inline-block;
@@ -123,19 +129,15 @@ export default {
       user-select: none;
       -ms-touch-action: manipulation;
       touch-action: manipulation;
-      width: 24px;
-      height: 24px;
-      padding: 0;
-      font-size: 14px;
+      box-sizing: border-box;
       border-radius: 4px;
-      color: rgba(0,0,0,.65);
+      color: rgba(0,0,0,.55);
       background-color: #fff;
       border: none;
       outline: none;
+      .tool-btn-icon{
+        font-size: 18px;
+      }
     }
-}
-.el-radio{
-  display: block;
-  margin: 5px;
 }
 </style>
