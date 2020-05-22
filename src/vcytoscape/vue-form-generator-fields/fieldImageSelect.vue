@@ -15,7 +15,7 @@
 <script>
 import { abstractField } from 'vue-form-generator'
 export default {
-  name: 'ImageUpload',
+  name: 'ImageSelect',
   mixins: [ abstractField ],
   methods: {
     imageChange (fileObj) {
@@ -26,13 +26,18 @@ export default {
   },
   computed: {
     imageBoxStyle () {
-      return {
-        backgroundColor: this.model['background-color'],
+      const base = {
         backgroundPosition: 'center',
-        backgroundImage: `url(${this.value})`,
-        backgroundRepeat: this.model['background-repeat'],
         backgroundSize: 'contain'
       }
+      if (this.value) {
+        base.backgroundImage = `url(${this.value})`
+      }
+      if (this.model) {
+        base.backgroundColor = this.model['background-color']
+        base.backgroundRepeat = this.model['background-repeat']
+      }
+      return base
     },
     hasImage () {
       return this.value && this.value !== 'none'

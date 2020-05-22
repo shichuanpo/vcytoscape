@@ -12,7 +12,7 @@
 import cytoscape from 'cytoscape'
 import toolbar from './toolbar'
 import createEvents from '../common/createEvents'
-import { merge, mergeArrayConcat, createId, debounce } from '../common/util'
+import { merge, mergeArrayConcat, createId, debounce, filterParams } from '../common/util'
 import { categoryOption, cytoscapeOption } from '../config'
 import mixin from '../mixins'
 export default {
@@ -76,7 +76,7 @@ export default {
             _categoryStatus[key + '_' + name] = status
             return {
               selector: `.${this.categoryNameToClass[key + '_' + name]}`,
-              style: merge({}, _defaultStyle[_baseIdx], style)
+              style: merge({}, _defaultStyle[_baseIdx], filterParams(style))
             }
           }))
         })

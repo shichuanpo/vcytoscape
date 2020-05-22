@@ -2,7 +2,7 @@
   vue-legend(:data="legendData", :option="option", v-model="legendModel", @setting="settingHandler", :editable="editable")
 </template>
 <script>
-import { merge, colorRgba } from '../common/util.js'
+import { merge, colorRgba, filterParams } from '../common/util.js'
 import { categoryOption } from '../config/index.js'
 import { vueLegend } from 'vue-legend'
 import mixin from '../mixins'
@@ -86,7 +86,7 @@ export default {
       this.categoryInType.forEach(({ name, style, formatter }, _idx) => {
         const _baseIdx = _idx % categoryOption[this.type].styles.length
         _categoryParams[name] = _categoryParams[name] || {}
-        _categoryParams[name].style = merge({}, categoryOption[this.type].styles[_baseIdx], style)
+        _categoryParams[name].style = merge({}, categoryOption[this.type].styles[_baseIdx], filterParams(style))
         _categoryParams[name].formatter = formatter
       })
       return this.getTransStyle(_categoryParams)
