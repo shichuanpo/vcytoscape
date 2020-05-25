@@ -1,5 +1,5 @@
 <template lang="pug">
-  .cytoscape-toolbar(:class="[toolbarOption.orient]", :style="toolbarOption.style")
+  .cytoscape-toolbar(v-if="show", :class="[toolbarOption.orient]", :style="toolbarOption.style")
       slot(name="toolbar-before")
       template(v-for="item in filterToolbar")
         a.tool-btn(
@@ -55,6 +55,9 @@ export default {
     }
   },
   computed: {
+    show () {
+      return this.filterToolbar.length || Object.entries(this.$slots).some(([key, value]) => !!value)
+    },
     toolbarOption () {
       return merge({}, this.defaultOption, this.toolbar || {})
     },
