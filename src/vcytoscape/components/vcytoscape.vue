@@ -86,11 +86,14 @@ export default {
         status: _categoryStatus
       }
     },
+    /**
+     * cytoscapeOption style > category style
+     */
     cytoscapeOptions () {
       const layout = this.layoutName ? { layout: { name: this.layoutName } } : {}
-      const _mergeOption = mergeArrayConcat({}, cytoscapeOption, this.option || {}, {
+      const _mergeOption = mergeArrayConcat({}, cytoscapeOption, {
         style: this.categoryConfig.styles
-      }, layout)
+      }, this.option || {}, layout)
       return _mergeOption
     }
   },
