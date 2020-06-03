@@ -3,6 +3,7 @@
       slot(name="toolbar-before")
       template(v-for="item in filterToolbar")
         a.tool-btn(
+          :title="item.label",
           @click="toolbarClickHandler(item.name)"
         )
           svg-icon.tool-btn-icon(:icon-name="item.icon")

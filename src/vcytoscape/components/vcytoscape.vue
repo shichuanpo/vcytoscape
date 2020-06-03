@@ -123,8 +123,9 @@ export default {
     },
     centerHandler () {
       if (this.$cytoscapeInstance) {
-        this.debounceAnimate({
-          center: this.$cytoscapeInstance.$()
+        const elements = this.$cytoscapeInstance.$()
+        elements.length && this.debounceAnimate({
+          center: elements
         })
       }
     },

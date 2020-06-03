@@ -1,3 +1,4 @@
+import { debounce } from './util'
 const handlers = {
   _cxttap: function (e) {
     const element = e.target
@@ -6,7 +7,7 @@ const handlers = {
       this.elements(element).select()
     }
   },
-  _select: function (e) {
+  _select: debounce(function (e) {
     const element = e.target
     if (element !== this) {
       const targetElement = this.elements(':selected')
@@ -20,10 +21,10 @@ const handlers = {
       elseElements.removeClass('hover').addClass('unhover')
       hoverElements.removeClass('unhover').addClass('hover')
     }
-  },
-  _unselect: function () {
-    this.elements().removeClass('unhover').removeClass('hover')
-  }
+  }, 50),
+  _unselect: debounce(function () {
+    this.elements().removeClass(['hover', 'unhover'])
+  }, 50)
 }
 function createEvents (cy) {
   const selector = ''
