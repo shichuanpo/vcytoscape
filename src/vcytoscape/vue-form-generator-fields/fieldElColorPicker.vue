@@ -28,7 +28,6 @@ export default {
     line-height: 26px;
     border: none;
     background: transparent;
-    color: #01acf3;
     &, &:focus {
       outline: none;;
     }
