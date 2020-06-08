@@ -24,7 +24,6 @@
   > * 基于数据渲染当前显示的图，添加删除，只要修改数据即可。
   > * filterByFunction会删除数据，但是会缓存，getAllElements能拿到包含过滤数据的全部数据
   > * 数据量超过1k，推荐使用[cytoscape-d3-force](https://github.com/shichuanpo/cytoscape.js-d3-force)布局，依赖d3-force, 有布局的进度返回
-  > * 本组件依 赖vue 和 element-ui 保证项目已安装这两个依赖 ❗️
 
 ## 案例
   
@@ -55,7 +54,7 @@
   });
   ```
   
-  获取配置的schema❗️
+  获取配置的schema ✅
   ```js
   import { nodeSchema, edgeSchema } from 'vcytoscape'
   ```
@@ -125,7 +124,6 @@
 事件名 | 说明 | 参数
 :-: | :-: | :-:
 update | cytoscape实例数据更新（包括 数据重置，添加，删除，过滤等等） | cytoscape事件
-setting:category | 分类编辑后的更新 | params: { type(点/边), name(分类名称), style(分类样式) }
 
 其他详见cytoscape文档: http://js.cytoscape.org/#introduction
 
@@ -164,7 +162,7 @@ setting | 分类编辑点击事件 | params: { type, name, label }
 参数 | 说明 | 类型 | 可选值 | 默认值
 :-: | :-: | :-: | :-: | :-:
 value / v-model | 配置表单 | Object | - | -|
-type | 表单类型 | String | nodes/edges | nodes |
+schema ✅ | 表单shcema | Array | - | - |
 
 
 ## 附录说明
