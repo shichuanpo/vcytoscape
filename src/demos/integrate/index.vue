@@ -18,7 +18,7 @@
         .title {{settingModel.title}}
         a.close(@click="settingVisible = false") ×
       section.body
-        vcytoscape-setting(v-model="settingModel.form", :type="settingModel.type")
+        vcytoscape-setting(v-model="settingModel.form", :schema="settingModel.schema")
 </template>
 
 <script>
@@ -30,6 +30,7 @@ import data from '../../mock'
 import filterPanel from './filterPanel'
 import tippy, { hideAll } from 'tippy.js'
 import 'tippy.js/themes/material.css'
+import { nodeSchema, edgeSchema } from '../../vcytoscape/config'
 export default {
   name: 'cytoscapePage',
   components: { filterPanel },
@@ -140,7 +141,7 @@ export default {
       settingVisible: false,
       settingModel: {
         form: null,
-        type: 'nodes'
+        schema: []
       }
     }
   },
@@ -174,7 +175,7 @@ export default {
   methods: {
     settingHandler (item) {
       this.settingVisible = true
-      this.settingModel.type = item.type
+      this.settingModel.schema = item.type === 'nodes' ? nodeSchema : edgeSchema
       this.settingModel.title = item.label
       if (item.type === 'nodes') {
         this.settingModel.form = category.nodes.styles[item.name]

@@ -1,6 +1,6 @@
 <template lang="pug">
 .setting-form
-  vue-form-generator(:schema="schema", :model="model")
+  vue-form-generator(:schema="computedSchema", :model="model")
 </template>
 <script>
 import { edgeSchema, nodeSchema } from '../config'
@@ -13,6 +13,9 @@ export default {
     type: {
       type: String,
       default: 'nodes'
+    },
+    schema: {
+      type: Array
     },
     model: {
       type: Object
@@ -33,8 +36,10 @@ export default {
     }
   },
   computed: {
-    schema () {
-      return this.type === 'nodes' ? this.nodeSchema : this.edgeSchema
+    computedSchema () {
+      return this.schema
+        ? { fields: this.schema }
+        : (this.type === 'nodes' ? this.nodeSchema : this.edgeSchema)
     }
   }
 }

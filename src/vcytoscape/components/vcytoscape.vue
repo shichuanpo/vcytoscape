@@ -49,8 +49,7 @@ export default {
       cacheRandomIdMap: {},
       filters: {},
       $layout: null,
-      $removeData: null,
-      oldLayout: null
+      $removeData: null
     }
   },
   computed: {
@@ -104,11 +103,12 @@ export default {
       },
       deep: true
     },
-    cytoscapeOptions: {
+    'cytoscapeOptions.layout.name' () {
+      this.reLayout()
+    },
+    'cytoscapeOptions.style': {
       handler (newValue) {
-        const reLayout = (this.oldLayout || {}).name !== (newValue.layout || {}).name
-        this.oldLayout = newValue.layout
-        this.$cytoscapeInstance && this.setOptions(newValue, reLayout)
+        this.setStyle(newValue)
       },
       deep: true
     }
@@ -124,7 +124,7 @@ export default {
     centerHandler () {
       if (this.$cytoscapeInstance) {
         const elements = this.$cytoscapeInstance.$()
-        elements.length && this.debounceAnimate({
+        elements.some(ele => ele.visible()) && this.debounceAnimate({
           center: elements
         })
       }
@@ -236,18 +236,24 @@ export default {
       return this.$cytoscapeInstance &&
           (this.$cytoscapeInstance.elements().merge(this.$removeData || this.$cytoscapeInstance.collection()))
     },
-    /****
-     * cytoscape option设置只有拆分的放法
+    /***
+     * style保存原有的style，防止cy原生style方法没有同步的问题
      */
-
-    setOptions: function (option, reLayout) {
+    setStyle (newStyle) {
       if (!this.$cytoscapeInstance) return
       this.$cytoscapeInstance.startBatch()
-      Object.keys(option).forEach(key => {
-        this.$cytoscapeInstance[key] && this.$cytoscapeInstance[key](option[key])
+      const oldStyle = this.$cytoscapeInstance.style()
+      newStyle.forEach(({ selector, style }) => {
+        oldStyle.selector(selector).style(style)
       })
+      oldStyle.update()
       this.$cytoscapeInstance.endBatch()
-      reLayout && this.reLayout()
+    },
+    setOption (key, value) {
+      if (!this.$cytoscapeInstance) return
+      if (JSON.stringify(this.$cytoscapeInstance[key]()) !== JSON.stringify(value)) {
+        this.$cytoscapeInstance[key](value)
+      }
     },
     /****
      * cytoscape并不支持数据重置，
@@ -338,9 +344,11 @@ export default {
       data && data.length && this.reLayout()
     },
     reLayout () {
-      this.$layout && this.$layout.stop()
-      this.$layout = this.$cytoscapeInstance.layout(this.cytoscapeOptions.layout)
-      this.$layout.run()
+      if (this.$cytoscapeInstance) {
+        this.$layout && this.$layout.stop()
+        this.$layout = this.$cytoscapeInstance.layout(this.cytoscapeOptions.layout)
+        this.$layout.run()
+      }
     },
     async destroy () {
       this.$layout && this.$layout.stop()
@@ -388,7 +396,18 @@ export default {
       relayout && this.reLayout()
       this.$cytoscapeInstance.emit('update') // 自定义事件 update
       return _filterElements
+    },
+    addCyOptionEvents () {
+      ['zoom', 'pan', 'minZoom', 'maxZoom', 'zoomingEnabled', 'userZoomingEnabled', 'panningEnabled', 'userPanningEnabled', 'boxSelectionEnabled', 'selectionType', 'autolock', 'autoungrabify', 'autounselectify'].forEach(key => {
+        let unwatch = this.$watch(`cytoscapeOptions.${key}`, function (newValue) {
+          this.setOption(key, newValue)
+        })
+        this.events.push(unwatch)
+      })
     }
+  },
+  created () {
+    this.addCyOptionEvents()
   },
   mounted () {
     this.setData(this.unifyData)
