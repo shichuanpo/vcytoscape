@@ -3,8 +3,9 @@
   .image-box(:style="imageBoxStyle")
     .add(v-if="!hasImage") +
     template(v-else)
-      a.remove(@click="value='none'") -
+      a.remove(@click="removeImage") -
     input(
+      ref="ImageSelectRef",
       accept=".jpg, .jpeg, .png, .svg",
       type="file",
       :disabled="disabled",
@@ -22,6 +23,10 @@ export default {
       if (fileObj.target.files && fileObj.target.files[0]) {
         this.value = URL.createObjectURL(fileObj.target.files[0])
       }
+    },
+    removeImage () {
+      this.value = 'none'
+      this.$refs.ImageSelectRef.value = ''
     }
   },
   computed: {

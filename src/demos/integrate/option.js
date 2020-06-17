@@ -26,7 +26,7 @@ export default {
     manyBodyStrength: -300,
     stop: (e) => {},
     tick: (progress) => {},
-    randomize: false,
+    randomize: true,
     infinite: true
   }
 }

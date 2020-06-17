@@ -23,6 +23,7 @@ export default {
       borderStyle: 'solid'
     },
     inactiveTagStyle: {
+      filter: 'grayscale(100%)',
       borderColor: '#ccc'
     }
   },
@@ -42,6 +43,7 @@ export default {
       'line-height': '10px'
     },
     inactiveTagStyle: {
+      filter: 'grayscale(100%)',
       borderColor: '#ccc',
       backgroundColor: 'none'
     }
