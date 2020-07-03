@@ -1,6 +1,6 @@
 {
   "name": "vcytoscape",
-  "version": "1.4.8",
+  "version": "1.4.9",
   "main": "lib/vcytoscape.common.js",
   "author": "shichuanpo <yangdongfeng8@126.com>",
   "scripts": {

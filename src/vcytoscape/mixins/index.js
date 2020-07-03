@@ -46,7 +46,7 @@ export default {
         const keys = (_categorys.key || '').split('.')
         const _styles = _categorys.styles || {}
         const _status = _categorys.status || {}
-        const names = Array.from(new Set(this.unifyData[type].map(({ data }) => this.getDataFromKey(data, keys))))
+        const names = Array.from(new Set(this.unifyData[type].map(({ data }) => this.getDataFromKey(data, keys)).filter(name => !!name)))
         newCategorys = names.map((name, idx) => {
           return {
             name,

@@ -221,6 +221,11 @@ export default {
     getDataWithClassesFromType (item, type = 'nodes') {
       const { name } = this.mergeCategorys[type].find(({ matching, name }) => matching(item.data)) || {}
       item.classes = item.classes || []
+      if (!item.classes) {
+        item.classes = []
+      } else if (typeof item.classes === 'string') {
+        item.classes = item.classes.split(' ')
+      }
       merge(item, this.categoryConfig.status[type + '_' + name])
       name && item.classes.push(this.categoryNameToClass[type + '_' + name])
       return item
@@ -236,18 +241,46 @@ export default {
       return this.$cytoscapeInstance &&
           (this.$cytoscapeInstance.elements().merge(this.$removeData || this.$cytoscapeInstance.collection()))
     },
+    getExistStyle () {
+      const _style = this.$cytoscapeInstance.style()
+      const json = []
+      for (let i = _style.defaultLength; i < _style.length; i++) {
+        let cxt = _style[ i ]
+        let selector = cxt.selector
+        let props = cxt.properties
+        let css = {}
+        for (let j = 0; j < props.length; j++) {
+          let prop = props[ j ]
+          css[ prop.name ] = prop.strValue === 'fn' ? prop.value : prop.strValue
+        }
+        json.push({
+          selector: !selector ? 'core' : selector.toString(),
+          style: css
+        })
+      }
+      return json
+    },
+    mergeStyleSpecial (style = []) {
+      let newStyle = style.slice()
+      const existStyle = this.getExistStyle()
+      for (let i = 0; i < newStyle.length; i++) {
+        const existStyleItem = existStyle[i]
+        let newStyleItem = newStyle[i]
+        if (existStyleItem.selector === newStyleItem.selector) {
+          merge(existStyleItem, newStyleItem)
+        } else {
+          existStyle.splice(i, 0, newStyleItem)
+        }
+      }
+      return existStyle
+    },
     /***
      * style保存原有的style，防止cy原生style方法没有同步的问题
      */
     setStyle (newStyle) {
       if (!this.$cytoscapeInstance) return
-      this.$cytoscapeInstance.startBatch()
-      const oldStyle = this.$cytoscapeInstance.style()
-      newStyle.forEach(({ selector, style }) => {
-        oldStyle.selector(selector).style(style)
-      })
-      oldStyle.update()
-      this.$cytoscapeInstance.endBatch()
+      const mergedStyle = this.mergeStyleSpecial(newStyle)
+      this.$cytoscapeInstance.style(mergedStyle)
     },
     setOption (key, value) {
       if (!this.$cytoscapeInstance) return
