@@ -5,7 +5,7 @@
     v-model="value",
     :disabled="disabled",
     :readonly="schema.readonly",
-    show-alpha,
+    :show-alpha="schema.showAlpha",
     size="small"
   )
 </template>
