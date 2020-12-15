@@ -1,6 +1,6 @@
 {
   "name": "vcytoscape",
-  "version": "1.4.9",
+  "version": "1.4.11",
   "main": "lib/vcytoscape.common.js",
   "author": "shichuanpo <yangdongfeng8@126.com>",
   "scripts": {
@@ -55,7 +55,7 @@
     "cytoscape-d3-force": "^1.1.4",
     "element-ui": "^2.13.1",
     "vue-form-generator": "^2.3.4",
-    "vue-legend": "^1.1.8"
+    "vue-legend": "^1.1.9"
   },
   "husky": {
     "hooks": {

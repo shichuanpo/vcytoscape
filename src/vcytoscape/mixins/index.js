@@ -22,9 +22,9 @@ export default {
   },
   methods: {
     filterEdgeWithoutNode (data) {
-      const nodes = data.nodes || []
+      const nodes = data?.nodes || []
       const nodeIds = nodes.map(({ data }) => data.id)
-      const edges = (data.edges || []).filter(({ data }) => nodeIds.includes(data.source) && nodeIds.includes(data.target))
+      const edges = data?.edges?.filter(({ data }) => nodeIds.includes(data.source) && nodeIds.includes(data.target)) || []
       return { nodes, edges }
     },
     getCategoryByType (type) {

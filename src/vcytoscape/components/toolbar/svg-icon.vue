@@ -25,7 +25,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 .svg-icon {
   fill: currentColor;
   width: 1em;
