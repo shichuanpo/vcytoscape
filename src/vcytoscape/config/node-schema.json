@@ -94,7 +94,8 @@
 }, {
   "model": "background-color",
   "label": "背景颜色",
-  "type": "elColorPicker"
+  "type": "elColorPicker",
+  "showAlpha": true
 }, {
   "model": "background-image",
   "label": "背景图片",
