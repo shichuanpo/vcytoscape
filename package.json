@@ -30,7 +30,7 @@
     "@commitlint/config-conventional": "^8.3.4",
     "@vue/cli-plugin-babel": "^4.1.0",
     "@vue/cli-plugin-eslint": "^4.1.0",
-    "@vue/cli-service": "^4.1.0",
+    "@vue/cli-service": "^5.0.8",
     "@vue/eslint-config-standard": "^4.0.0",
     "babel-eslint": "^10.0.3",
     "cytoscape-cola": "^2.3.1",
@@ -45,7 +45,7 @@
     "less-loader": "^4.1.0",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
-    "svg-sprite-loader": "^5.0.0",
+    "svg-sprite-loader": "^5.2.1",
     "tippy.js": "^5.2.1",
     "vue": "^2.6.11",
     "vue-template-compiler": "^2.6.10"
